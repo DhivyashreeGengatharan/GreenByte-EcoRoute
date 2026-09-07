@@ -9,9 +9,9 @@ import Marketplace from './components/Marketplace';
 import FloatingParticles from './components/ui/FloatingParticles';
 
 const DashboardGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isExplored = sessionStorage.getItem('ecoroute_scroll_completed') === 'true';
+  const isExplored = sessionStorage.getItem('ecoroute_explored') === 'true';
   if (!isExplored) {
-    return <Navigate to="/?explore=required" replace />;
+    return <Navigate to="/" replace />;
   }
   return <>{children}</>;
 };

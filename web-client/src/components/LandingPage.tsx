@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { Card } from './ui/Card';
@@ -17,9 +16,7 @@ import {
   ChevronRightIcon,
   ChartIcon,
   ExternalLinkIcon,
-  ThermometerIcon,
-  LockIcon,
-  UnlockIcon
+  ThermometerIcon
 } from './ui/Icons';
 import Globe3D from './3d/Globe3D';
 import DigitalTwin3D from './3d/DigitalTwin3D';
@@ -29,56 +26,12 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<'eco' | 'shortest'>('eco');
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [hasCompletedScroll, setHasCompletedScroll] = useState(() => {
-    return sessionStorage.getItem('ecoroute_scroll_completed') === 'true';
-  });
 
   useEffect(() => {
-    // Check if redirected from dashboard guard
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('explore') === 'required' && !hasCompletedScroll) {
-      toast('🌌 Welcome! Please explore the 3D Environmental Intelligence & Digital Twin simulation before launching the cockpit.', {
-        id: 'explore-required-notice',
-        icon: '🔒',
-        duration: 5000,
-        style: {
-          borderRadius: '14px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          color: '#38bdf8',
-          border: '1px solid rgba(0, 240, 255, 0.4)',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.2)'
-        }
-      });
-    }
-
     const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = Math.min(100, Math.max(0, Math.round((scrollTop / (scrollHeight || 1)) * 100)));
-      setScrollProgress(progress);
-      setScrolled(scrollTop > 30);
-
-      // Unlock when scrolled near the end (85%+)
-      if (progress >= 85 && !sessionStorage.getItem('ecoroute_scroll_completed')) {
-        sessionStorage.setItem('ecoroute_scroll_completed', 'true');
-        setHasCompletedScroll(true);
-        toast.success('🎉 3D Digital Twin & Climate Lab Explored! Navigation Cockpit is now Unlocked.', {
-          id: 'cockpit-unlocked-toast',
-          duration: 4000,
-          style: {
-            borderRadius: '14px',
-            background: 'rgba(6, 78, 59, 0.95)',
-            color: '#6ee7b7',
-            border: '1px solid rgba(16, 185, 129, 0.5)',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.3)'
-          }
-        });
-      }
+      setScrolled(window.scrollY > 30);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -97,48 +50,15 @@ const LandingPage: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
-  }, [hasCompletedScroll]);
+  }, []);
 
-  const handleLaunchApp = (e?: React.MouseEvent) => {
-    if (!hasCompletedScroll && scrollProgress < 85) {
-      if (e) e.preventDefault();
-      toast('🔒 Please scroll through the 3D Digital Twin & environmental model to unlock the cockpit!', {
-        id: 'unlock-prompt-toast',
-        icon: '🌿',
-        duration: 4000,
-        style: {
-          borderRadius: '14px',
-          background: '#0f172a',
-          color: '#38bdf8',
-          border: '1px solid rgba(0, 240, 255, 0.4)',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.25)',
-          fontSize: '13px',
-          fontWeight: '600'
-        }
-      });
-      const twin = document.getElementById('digital-twin') || document.getElementById('why-healthier');
-      twin?.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
-
+  const handleLaunchCockpit = () => {
+    sessionStorage.setItem('ecoroute_explored', 'true');
     navigate('/dashboard');
   };
 
-  const handleScrollToNext = () => {
-    if (hasCompletedScroll) {
-      navigate('/dashboard');
-      return;
-    }
-
-    if (scrollProgress < 25) {
-      document.getElementById('why-healthier')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (scrollProgress < 50) {
-      document.getElementById('intelligence-grid')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (scrollProgress < 75) {
-      document.getElementById('digital-twin')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
-    }
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleOpenMarketplace = () => {
@@ -147,11 +67,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="landing-page-root">
-      {/* ── Global 3D Experience Progress Tracker ── */}
-      <div className="landing-progress-bar-track" role="progressbar" aria-valuenow={scrollProgress} aria-valuemin={0} aria-valuemax={100}>
-        <div className="landing-progress-bar-fill" style={{ width: `${scrollProgress}%` }} />
-      </div>
-
       {/* ── Top Navigation Bar ── */}
       <header className={`landing-nav ${scrolled ? 'nav-scrolled' : ''}`}>
         <div className="landing-nav-inner">
@@ -177,14 +92,13 @@ const LandingPage: React.FC = () => {
 
           <div className="nav-actions">
             <Button
-              variant={hasCompletedScroll ? 'primary' : 'secondary'}
+              variant="secondary"
               size="sm"
-              icon={hasCompletedScroll ? <ChevronRightIcon size={15} /> : <LockIcon size={14} color="#00f0ff" />}
+              icon={<ChevronRightIcon size={15} />}
               iconPosition="right"
-              onClick={handleLaunchApp}
-              className={hasCompletedScroll ? 'btn-cockpit-unlocked' : 'btn-cockpit-locked'}
+              onClick={() => scrollToSection('why-healthier')}
             >
-              {hasCompletedScroll ? 'Launch Cockpit' : `Locked (${scrollProgress}%)`}
+              Explore 3D Grid ↓
             </Button>
           </div>
         </div>
@@ -214,20 +128,17 @@ const LandingPage: React.FC = () => {
               <Button
                 variant="primary"
                 size="lg"
-                onClick={handleLaunchApp}
-                icon={hasCompletedScroll ? <RouteIcon size={18} /> : <ChevronRightIcon size={18} />}
+                onClick={() => scrollToSection('why-healthier')}
+                icon={<ChevronRightIcon size={18} />}
               >
-                {hasCompletedScroll ? 'Plan Pollution-Aware Route' : 'Explore 3D Digital Twin & Grid ↓'}
+                Explore Environmental Grid ↓
               </Button>
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() => {
-                  const el = document.getElementById('why-healthier');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={() => scrollToSection('digital-twin')}
               >
-                Explore Comparative Science
+                3D Digital Twin Simulation ↓
               </Button>
             </div>
 
@@ -429,8 +340,8 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="split-action">
-              <Button variant="primary" size="md" onClick={handleLaunchApp}>
-                View Your Carbon Vault
+              <Button variant="primary" size="md" onClick={() => scrollToSection('digital-twin')}>
+                Explore 3D Climate Lab ↓
               </Button>
             </div>
           </div>
@@ -535,8 +446,8 @@ const LandingPage: React.FC = () => {
       {/* ── Final Call to Action ── */}
       <section className="final-cta-section">
         <div className="final-cta-container animate-on-scroll">
-          <Badge variant={hasCompletedScroll ? 'eco' : 'info'} size="sm" dot>
-            {hasCompletedScroll ? '3D Experience Unlocked' : 'Final Checkpoint'}
+          <Badge variant="eco" size="sm" dot>
+            Environmental Mobility Grid
           </Badge>
           <h2>Ready to transform your daily commute?</h2>
           <p>
@@ -546,43 +457,15 @@ const LandingPage: React.FC = () => {
             <Button 
               variant="primary" 
               size="lg" 
-              onClick={() => {
-                sessionStorage.setItem('ecoroute_scroll_completed', 'true');
-                setHasCompletedScroll(true);
-                navigate('/dashboard');
-              }} 
-              icon={<RouteIcon size={18} />}
+              onClick={handleLaunchCockpit} 
+              icon={<RouteIcon size={20} />}
               className="btn-pulse-glow"
             >
-              Open Navigation Cockpit →
+              Launch Navigation Cockpit →
             </Button>
           </div>
         </div>
       </section>
-
-      {/* ── Floating 3D Experience Progress & Navigation Pill ── */}
-      <aside 
-        className={`floating-scroll-guide ${hasCompletedScroll ? 'guide-unlocked' : ''}`}
-        onClick={handleScrollToNext}
-        title={hasCompletedScroll ? 'Click to enter Cockpit' : 'Scroll down to explore complete 3D UI'}
-      >
-        <div className="guide-dot-ring">
-          {hasCompletedScroll ? (
-            <UnlockIcon size={14} color="#00ff9d" />
-          ) : (
-            <LockIcon size={14} color="#00f0ff" />
-          )}
-        </div>
-        <span className="guide-text">
-          {hasCompletedScroll 
-            ? '✨ 3D UI Explored · Enter Cockpit →' 
-            : `Scroll to explore 3D Digital Twin (${scrollProgress}%) ↓`
-          }
-        </span>
-        <div className="guide-mini-bar">
-          <div className="guide-mini-fill" style={{ width: `${scrollProgress}%` }} />
-        </div>
-      </aside>
 
       {/* ── Minimalist Footer ── */}
       <footer className="landing-footer">
