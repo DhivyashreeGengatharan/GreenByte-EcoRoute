@@ -205,10 +205,6 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
                         <ClockIcon size={14} color="#ffb800" />
                         <strong style={{ color: "#f8fafc" }}>{route.summary.durationMin} min</strong>
                       </span>
-                      <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                        <WindIcon size={14} color="#00ff9d" />
-                        <span>AQI {route.summary.averageAQI}</span>
-                      </span>
                     </div>
                   </button>
                 );
