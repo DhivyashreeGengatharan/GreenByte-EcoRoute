@@ -106,6 +106,20 @@
   color: #00f0ff;
 }
 
+.nav-link.nav-highlight {
+  color: #00f0ff;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.nav-link.nav-highlight:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+}
+
 .nav-link-btn {
   background: none;
   border: none;
@@ -969,4 +983,129 @@
 .btn-pulse-glow:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 0 35px rgba(0, 255, 157, 0.65) !important;
+}
+
+/* ── Narrative Flow Connectors ── */
+.section-narrative-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 48px auto 0;
+  max-width: 440px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.section-narrative-flow:hover {
+  transform: translateY(3px);
+}
+
+.flow-step-line {
+  width: 2px;
+  height: 36px;
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.6) 0%, rgba(16, 185, 129, 0.2) 100%);
+  margin-bottom: 8px;
+}
+
+.flow-step-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  backdrop-filter: blur(12px);
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.section-narrative-flow:hover .flow-step-pill {
+  color: #00f0ff;
+  border-color: #00f0ff;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+}
+
+/* ── Digital Twin Gateway Card (Bridge from Carbon to Twin) ── */
+.digital-twin-gateway-card {
+  max-width: 1160px;
+  margin: 56px auto 0;
+  padding: 28px 36px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(6, 40, 34, 0.85) 100%);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 240, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  backdrop-filter: blur(16px);
+}
+
+.gateway-content {
+  max-width: 680px;
+}
+
+.gateway-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gateway-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 800;
+  color: #00f0ff;
+  letter-spacing: 0.08em;
+}
+
+.digital-twin-gateway-card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.digital-twin-gateway-card p {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Twin Interactive Guide Banner ── */
+.twin-interactive-guide {
+  max-width: 1160px;
+  margin: 20px auto 0;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.4;
+}
+
+.twin-interactive-guide .guide-icon {
+  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .digital-twin-gateway-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
 }

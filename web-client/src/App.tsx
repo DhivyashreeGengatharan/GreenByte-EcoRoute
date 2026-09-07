@@ -6,7 +6,6 @@ import { Toaster } from 'react-hot-toast';
 import LandingPage from './components/LandingPage';
 import DashboardPage from './components/DashboardPage';
 import Marketplace from './components/Marketplace';
-import FloatingParticles from './components/ui/FloatingParticles';
 
 const DashboardGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isExplored = sessionStorage.getItem('ecoroute_explored') === 'true';
@@ -37,7 +36,6 @@ const App: React.FC = () => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <FloatingParticles count={35} color="rgba(0, 240, 255, 0.3)" />
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={closeAuthModal}
