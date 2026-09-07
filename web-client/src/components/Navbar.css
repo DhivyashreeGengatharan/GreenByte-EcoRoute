@@ -1,0 +1,309 @@
+/* EcoRoute Cockpit Navigation Bar Styling - Obsidian Cyber-Neon Theme */
+
+.ecoroute-navbar {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(11, 17, 32, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+  flex-shrink: 0;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme='dark'] .ecoroute-navbar {
+  background: rgba(11, 17, 32, 0.88);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.nav-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-brand-icon-box {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #030712;
+  box-shadow: 0 0 16px rgba(0, 255, 157, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.nav-brand-link:hover .nav-brand-icon-box {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.5);
+}
+
+.nav-brand-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-brand-title {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  line-height: 1.1;
+}
+
+.nav-brand-tagline {
+  font-size: 11px;
+  font-weight: 600;
+  color: #00f0ff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Engine Status Chip */
+.nav-engine-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  font-size: 12px;
+  font-weight: 600;
+  color: #00ff9d;
+  letter-spacing: 0.01em;
+}
+
+.nav-engine-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #00ff9d;
+  position: relative;
+  box-shadow: 0 0 8px #00ff9d;
+}
+
+.nav-engine-dot::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  border: 1.5px solid #00ff9d;
+  animation: pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  70% { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Navigation Links */
+.nav-center-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.nav-item-link:hover {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.08);
+  border-color: rgba(0, 240, 255, 0.15);
+}
+
+.nav-item-link.active {
+  color: #00ff9d;
+  background: rgba(0, 255, 157, 0.12);
+  border-color: rgba(0, 255, 157, 0.3);
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.15);
+}
+
+/* Action Area */
+.nav-action-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-ledger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #00f0ff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nav-ledger-btn:hover {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+}
+
+/* User Menu Trigger */
+.nav-user-trigger {
+  position: relative;
+}
+
+.nav-avatar-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #00ff9d;
+  background: linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%);
+  color: #030712;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-avatar-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.5);
+}
+
+.nav-avatar-btn.unauthenticated {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.8);
+  color: #94a3b8;
+  box-shadow: none;
+}
+
+.nav-avatar-btn.unauthenticated:hover {
+  border-color: #00f0ff;
+  color: #00f0ff;
+}
+
+/* User Menu Dropdown */
+.nav-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background: #0f172a;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  z-index: 1200;
+  animation: navDropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes navDropdownFadeIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.nav-user-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-user-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #f8fafc;
+  margin-bottom: 2px;
+}
+
+.nav-user-email {
+  font-size: 12px;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #cbd5e1;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-dropdown-item:hover {
+  background-color: rgba(0, 240, 255, 0.1);
+  color: #00f0ff;
+}
+
+.nav-dropdown-item.danger {
+  color: #ff3d6e;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-dropdown-item.danger:hover {
+  background-color: rgba(255, 61, 110, 0.15);
+  color: #ff3d6e;
+}
+
+/* Mobile adjustments */
+@media (max-width: 860px) {
+  .nav-engine-chip {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ecoroute-navbar {
+    padding: 0 16px;
+  }
+  .nav-center-links {
+    display: none;
+  }
+}

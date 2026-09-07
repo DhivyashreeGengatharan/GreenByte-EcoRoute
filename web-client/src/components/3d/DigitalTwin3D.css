@@ -1,0 +1,268 @@
+/* ═══════════════════════════════════════════════════════════════════
+   DigitalTwin3D — Scoped 3D Urban Simulation Stylesheet
+   Pure Scoped CSS · Hardware-Accelerated · Glassmorphic
+   ═══════════════════════════════════════════════════════════════════ */
+
+.twin-3d-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  background: #030712;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.12);
+}
+
+.twin-canvas-mount {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.twin-canvas-mount:active {
+  cursor: grabbing;
+}
+
+/* ── Top Left HUD & Telemetry ── */
+.twin-hud-top-left {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.twin-hud-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(3, 7, 18, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  width: fit-content;
+}
+
+.twin-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 10px #00f0ff;
+  animation: pulse-cyan 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-cyan {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.5; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+.twin-hud-badge-text {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00f0ff;
+  text-transform: uppercase;
+}
+
+/* ── Telemetry Card ── */
+.twin-telemetry-card {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 270px;
+}
+
+.twin-telemetry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.twin-telemetry-delta {
+  color: #00ff9d;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
+}
+
+.twin-telemetry-metrics {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.twin-aqi-before {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ff3d6e;
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.twin-aqi-arrow {
+  font-size: 13px;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.twin-aqi-after {
+  font-size: 28px;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  color: #00ff9d;
+  text-shadow: 0 0 14px rgba(0, 255, 157, 0.5);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.twin-aqi-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.twin-meter-track {
+  height: 6px;
+  width: 100%;
+  background: #1e293b;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.twin-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff9d, #00f0ff);
+  border-radius: 9999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.6);
+}
+
+/* ── Top Right Camera Toggles ── */
+.twin-hud-top-right {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.twin-camera-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.twin-camera-btn:hover {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Bottom Intervention Dock ── */
+.twin-dock-container {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  max-width: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: rgba(3, 7, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.twin-dock-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.twin-dock-btn:hover {
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.twin-dock-btn.active {
+  background: linear-gradient(135deg, #00ff9d, #00f0ff);
+  color: #030712;
+  font-weight: 800;
+  border-color: transparent;
+  box-shadow: 0 0 24px rgba(0, 255, 157, 0.6);
+  transform: scale(1.04);
+}
+
+.twin-dock-cost-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #94a3b8;
+}
+
+.twin-dock-btn.active .twin-dock-cost-badge {
+  background: rgba(0, 0, 0, 0.2);
+  color: #030712;
+  font-weight: 800;
+}

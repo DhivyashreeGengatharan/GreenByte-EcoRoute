@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ── Spatial Obsidian Deep Space Palette ── */
+  --canvas-bg: #030712;
+  --canvas-bg-subtle: #070c18;
+  --surface-panel: rgba(15, 23, 42, 0.82);
+  --surface-panel-elevated: #0f172a;
+  --surface-card: #0f172a;
+  --surface-glass: rgba(15, 23, 42, 0.75);
+  --surface-glass-border: rgba(0, 240, 255, 0.14);
+  --surface-glass-highlight: rgba(255, 255, 255, 0.08);
+
+  /* ── Dark Spatial Canvas (for overlays & cockpit accents) ── */
+  --obsidian-base: #030712;
+  --obsidian-surface: #0b1120;
+  --obsidian-elevated: #0f172a;
+  --obsidian-border: rgba(0, 240, 255, 0.15);
+
+  /* ── Text Hierarchy ── */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-inverse: #ffffff;
+  --text-inverse-muted: #94a3b8;
+
+  /* ── Brand Core: Emerald & Mint ── */
+  --brand-emerald: #00ff9d;
+  --brand-emerald-hover: #00e08b;
+  --brand-emerald-dark: #00cc7e;
+  --brand-emerald-light: rgba(0, 255, 157, 0.15);
+  --brand-mint: #34d399;
+  --brand-emerald-glow: rgba(0, 255, 157, 0.28);
+
+  /* ── Technology Accents ── */
+  --accent-cyan: #00f0ff;
+  --accent-cyan-glow: rgba(0, 240, 255, 0.28);
+  --accent-indigo: #818cf8;
+  --accent-indigo-light: rgba(129, 140, 248, 0.15);
+
+  /* ── Semantic Environmental States (Strictly consistent) ── */
+  --state-eco: #00ff9d;
+  --state-eco-bg: rgba(0, 255, 157, 0.12);
+  --state-eco-border: rgba(0, 255, 157, 0.3);
+
+  --state-caution: #ffb800;
+  --state-caution-bg: rgba(255, 184, 0, 0.12);
+  --state-caution-border: rgba(255, 184, 0, 0.3);
+
+  --state-hazard: #ff3d6e;
+  --state-hazard-bg: rgba(255, 61, 110, 0.12);
+  --state-hazard-border: rgba(255, 61, 110, 0.3);
+
+  --state-info: #38bdf8;
+  --state-info-bg: rgba(56, 189, 248, 0.12);
+  --state-info-border: rgba(56, 189, 248, 0.3);
+
+  /* ── Spacing Scale (4/8pt) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── Border Radius Scale ── */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Elevation & Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  --shadow-glow-emerald: 0 0 24px rgba(16, 185, 129, 0.28);
+  --shadow-glow-cyan: 0 0 24px rgba(6, 182, 212, 0.25);
+  --shadow-glow-hazard: 0 0 20px rgba(239, 68, 68, 0.3);
+
+  /* ── HospitalIQ Deep Space & Cyber-Neon Theming ── */
+  --color-bg-primary: #030712;
+  --color-bg-secondary: #0b1120;
+  --color-bg-card: #0f172a;
+  
+  --color-accent-cyan: #00f0ff;
+  --color-accent-emerald: #00ff9d;
+  --color-accent-amber: #ffb800;
+  --color-accent-rose: #ff3d6e;
+  --color-accent-violet: #b026ff;
+
+  --color-surface-1: rgba(255, 255, 255, 0.03);
+  --color-surface-2: rgba(255, 255, 255, 0.06);
+  --color-surface-3: rgba(255, 255, 255, 0.10);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #64748b;
+
+  --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.15), 0 0 60px rgba(0, 240, 255, 0.05);
+  --shadow-glow-emerald: 0 0 20px rgba(0, 255, 157, 0.15), 0 0 60px rgba(0, 255, 157, 0.05);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base Reset & Typography ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--canvas-bg);
+  color: var(--text-primary);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+/* ── Data Metrics: High-Contrast Tabular Figures ── */
+.tabular-data, .metric-value {
+  font-family: 'JetBrains Mono', 'Plus Jakarta Sans', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* ── Glassmorphism Utility Tokens ── */
+.glass-panel {
+  background: var(--surface-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-panel-dark {
+  background: rgba(17, 24, 34, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--obsidian-border);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  color: var(--text-inverse);
+}
+
+/* ── Subtle Focus Rings for Accessibility ── */
+button:focus-visible, input:focus-visible, a:focus-visible {
+  outline: 2px solid var(--brand-emerald);
+  outline-offset: 2px;
+}
+
+/* ── Custom Scrollbars ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+/* ── Reduced Motion Accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Print Presentation Styles (PDF / Physical Print) ── */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  .ecoroute-navbar,
+  .sidebar-container,
+  .dashboard-panel,
+  .cockpit-hud-top,
+  .analytics-header,
+  .marketplace-top-nav,
+  .auth-modal-overlay,
+  button:not(.print-include) {
+    display: none !important;
+  }
+  .analytics-overlay {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+  #root, .cockpit-container, .cockpit-workspace {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}

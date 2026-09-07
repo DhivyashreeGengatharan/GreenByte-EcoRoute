@@ -1,0 +1,62 @@
+# ==========================================
+# Environment Variables & Secrets (CRITICAL)
+# ==========================================
+.env
+.env.*
+*.env
+*.local
+backend/.env
+web-client/.env.local
+!*.env.example
+
+# ==========================================
+# Local Databases & Sensitive Data
+# ==========================================
+localDb.json
+**/localDb.json
+
+# ==========================================
+# Dependencies
+# ==========================================
+node_modules/
+**/node_modules/
+
+# ==========================================
+# Build & Distribution Outputs
+# ==========================================
+dist/
+**/dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# ==========================================
+# Logs & Cache
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.eslintcache
+
+# ==========================================
+# Scratch, Debug & Temporary Scripts
+# ==========================================
+scratch/
+**/scratch/
+check-sections.mjs
+debug-landing.mjs
+take-3d-screenshots.mjs
+tsc_errors.txt
+build_output.txt
+
+# ==========================================
+# Editor, IDE & Agent Files
+# ==========================================
+.agents/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,207 @@
+/* EcoRoute Cockpit Spatial Layout & Responsive Drawer System - Obsidian Cyber-Neon Theme */
+
+.cockpit-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #030712;
+  color: #f8fafc;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif);
+}
+
+.cockpit-workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 64px);
+  background: #030712;
+}
+
+.cockpit-main-viewport {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #030712;
+}
+
+/* Spatial HUD Overlay Chips */
+.cockpit-hud-top {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.cockpit-hud-chip {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 10px;
+  color: #f8fafc;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease;
+}
+
+.cockpit-hud-chip.clickable {
+  cursor: pointer;
+}
+
+.cockpit-hud-chip.clickable:hover {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(0, 255, 157, 0.6);
+  box-shadow: 0 0 16px rgba(0, 255, 157, 0.3);
+  transform: translateY(-1px);
+}
+
+.cockpit-hud-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00ff9d;
+  box-shadow: 0 0 10px #00ff9d;
+}
+
+.cockpit-hud-chip-label {
+  color: #00f0ff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+/* Sidebar and Panel Obsidian Styling */
+.sidebar-container {
+  background: rgba(11, 17, 32, 0.95);
+  border-right: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
+}
+
+.dashboard-panel {
+  background: rgba(11, 17, 32, 0.95);
+  border-left: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Mobile Floating Controls Bar */
+.cockpit-mobile-dock {
+  display: none;
+}
+
+/* Mobile / Tablet Drawer Adjustments */
+@media (max-width: 960px) {
+  .cockpit-hud-top {
+    left: 12px;
+    top: 12px;
+    gap: 6px;
+  }
+
+  .cockpit-hud-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* Left Sidebar Drawer on Mobile */
+  .sidebar-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000 !important;
+    max-width: 85vw;
+    width: 340px !important;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.7);
+  }
+
+  .sidebar-container.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Right Dashboard Panel Drawer on Mobile */
+  .dashboard-panel {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000 !important;
+    max-width: 85vw;
+    width: 340px !important;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.7);
+  }
+
+  .dashboard-panel.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Mobile Backdrop Overlay */
+  .cockpit-drawer-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(3, 7, 18, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 900;
+  }
+
+  /* Mobile Bottom Floating Dock */
+  .cockpit-mobile-dock {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 800;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 6px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  }
+
+  .cockpit-mobile-dock-btn {
+    padding: 8px 14px;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+
+  .cockpit-mobile-dock-btn.active {
+    background: rgba(0, 255, 157, 0.15);
+    color: #00ff9d;
+    border: 1px solid rgba(0, 255, 157, 0.4);
+    box-shadow: 0 0 12px rgba(0, 255, 157, 0.2);
+  }
+}
