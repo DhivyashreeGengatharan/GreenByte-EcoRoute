@@ -893,7 +893,7 @@ app.post('/api/route', async (req, res) => {
         optimizationTriggered: false,
         processingTimeMs: Date.now() - startTime,
         routeLabels: Object.fromEntries(
-          sortedRoutes.map(r => [r.id, r.type])
+          sortedByValue.map(r => [r.id, r.type])
         ),
         routeSources: Object.fromEntries(
           scoredRoutes.map(r => [r.id, r.source || 'osrm'])
