@@ -183,17 +183,22 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
                       <Badge variant={badgeVariant} size="sm">
                         {badgeLabel}
                       </Badge>
-                      <span style={{
-                        fontSize: "13px",
-                        fontWeight: "800",
-                        fontFamily: "var(--font-mono, monospace)",
-                        color: route.summary.carbon >= 80 ? "#00ff9d" : route.summary.carbon >= 50 ? "#ffb800" : "#ff3d6e",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "3px"
-                      }}>
-                        Score: <AnimatedCounter value={route.summary.carbon} />
-                      </span>
+                      {(() => {
+                        const ecoPercent = Math.min(100, Math.max(0, Math.round(
+                          (route.summary.carbon / (route.summary.distanceKm * 5)) * 100
+                        )));
+                        const barColor = ecoPercent >= 70 ? "#00ff9d" : ecoPercent >= 45 ? "#ffb800" : "#ff3d6e";
+                        return (
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <span style={{ fontSize: "11px", fontWeight: "700", color: barColor }}>
+                              🌿 {ecoPercent}% Eco
+                            </span>
+                            <div style={{ width: "52px", height: "5px", borderRadius: "3px", background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
+                              <div style={{ width: `${ecoPercent}%`, height: "100%", borderRadius: "3px", background: barColor, transition: "width 0.6s ease" }} />
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12.5px", color: "#94a3b8" }}>
