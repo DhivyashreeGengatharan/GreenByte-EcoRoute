@@ -4,6 +4,8 @@ const { getUsersCollection } = require('../models/User');
 const { generateToken } = require('../middleware/authMiddleware');
 const { ObjectId } = require('mongodb');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'greenbyte_super_secret_jwt_key_2026';
+
 const router = express.Router();
 
 /**
@@ -193,7 +195,7 @@ router.get('/verify', async (req, res) => {
     }
 
     const jwt = require('jsonwebtoken');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     const usersCollection = await getUsersCollection();
     const user = await usersCollection.findOne({ _id: new ObjectId(decoded.userId) });

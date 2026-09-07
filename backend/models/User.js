@@ -3,7 +3,9 @@ const path = require('path');
 const dns = require('dns');
 const { MongoClient, ObjectId } = require('mongodb');
 
-const localDbPath = path.join(__dirname, 'localDb.json');
+const localDbPath = (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+  ? path.join('/tmp', 'localDb.json')
+  : path.join(__dirname, 'localDb.json');
 let db;
 let client;
 let isLocalFallback = false;

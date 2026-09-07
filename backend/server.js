@@ -14,6 +14,20 @@ const carbonRoutes = require('./routes/carbon');
 const { connectDB } = require('./models/User');
 
 const app = express();
+
+// Normalize URL in case Vercel rewrites prepended /server.js
+app.use((req, res, next) => {
+  if (req.url.startsWith('/server.js')) {
+    const rawPath = req.headers['x-matched-path'] || req.headers['x-now-route-matches'];
+    if (rawPath && !rawPath.startsWith('/server.js')) {
+      req.url = rawPath;
+    } else {
+      req.url = req.url.replace(/^\/server\.js/, '') || '/';
+    }
+  }
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors({
@@ -26,8 +40,12 @@ app.use(cors({
 connectDB().catch(err => console.warn('⚠️ MongoDB offline (routing still works):', err.message));
 
 app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/carbon', carbonRoutes);
+app.use('/api/carbon', carbonRoutes);
 app.get('/test', (req, res) => res.json({ status: 'ok', message: 'Backend reachable' }));
+app.get('/api/test', (req, res) => res.json({ status: 'ok', message: 'Backend reachable' }));
+app.get('/', (req, res) => res.json({ status: 'ok', message: 'GreenByte Backend API is active' }));
 
 /* ─────────────────── CONFIG ─────────────────── */
 
@@ -1224,10 +1242,15 @@ app.post('/api/simulate', async (req, res) => {
 /* ─────────────────── SERVER ─────────────────── */
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n🌍 Pollution-Aware Route Planner — Backend`);
-  console.log(`🚀 Listening on http://localhost:${PORT}`);
-  console.log(`📡 Adaptive sampling: 6–40 points | OSRM timeout: ${OSRM_TIMEOUT / 1000}s\n`);
-});
+let server;
 
-server.timeout = 120000;
+if (require.main === module || !process.env.VERCEL) {
+  server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n🌍 Pollution-Aware Route Planner — Backend`);
+    console.log(`🚀 Listening on http://localhost:${PORT}`);
+    console.log(`📡 Adaptive sampling: 6–40 points | OSRM timeout: ${OSRM_TIMEOUT / 1000}s\n`);
+  });
+  server.timeout = 120000;
+}
+
+module.exports = app;
