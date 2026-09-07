@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Use your env variable
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
 export interface BlockData {
   aqi: number;
@@ -17,7 +17,7 @@ export interface BlockData {
 
 export async function fetchAQIData(lat: number, lon: number): Promise<BlockData> {
   console.log("Calling backend:", API_BASE);
-  const res = await axios.get(`${API_BASE}/block-data`, {
+  const res = await axios.get(`${API_BASE}/api/block-data`, {
     params: { lat, lon },
   });
 

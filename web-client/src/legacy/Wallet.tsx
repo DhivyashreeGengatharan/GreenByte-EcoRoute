@@ -31,8 +31,9 @@ export const Wallet: React.FC<Props> = ({ userId, credits = 0 }) => {
         return;
       }
 
+      const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
       await axios.post(
-        `${import.meta.env.VITE_API_BASE}/api/mint-credit`, 
+        `${API_BASE}/api/mint-credit`, 
         {
           userId: userId || "guest",
           credits,
