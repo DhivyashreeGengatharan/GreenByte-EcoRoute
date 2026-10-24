@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'GreenByte EcoRoute',
   webDir: 'dist',
   server: {
-    url: 'https://greenbyte-ecoroute.vercel.app?platform=app',
+    url: 'https://greenbyte-ecoroute.vercel.app',
     cleartext: true,
     androidScheme: 'https'
   }
