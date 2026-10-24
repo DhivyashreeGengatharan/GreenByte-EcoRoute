@@ -346,6 +346,7 @@ type MapStyleKey = 'dark' | 'google' | 'streets' | 'satellite';
 
 const MAP_STYLES: Record<MapStyleKey, {
   name: string;
+  shortName: string;
   icon: string;
   url: string;
   attribution: string;
@@ -354,6 +355,7 @@ const MAP_STYLES: Record<MapStyleKey, {
 }> = {
   dark: {
     name: 'Cyber Dark',
+    shortName: 'Dark',
     icon: '🌙',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -361,6 +363,7 @@ const MAP_STYLES: Record<MapStyleKey, {
   },
   google: {
     name: 'Google Maps',
+    shortName: 'Google',
     icon: '📍',
     url: 'https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
     subdomains: '0123',
@@ -369,6 +372,7 @@ const MAP_STYLES: Record<MapStyleKey, {
   },
   streets: {
     name: 'Daylight Roads',
+    shortName: 'Roads',
     icon: '🗺️',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, TomTom',
@@ -376,6 +380,7 @@ const MAP_STYLES: Record<MapStyleKey, {
   },
   satellite: {
     name: 'Satellite',
+    shortName: 'Satellite',
     icon: '🛰️',
     url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
     subdomains: '0123',
@@ -913,7 +918,7 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
               title={`Switch basemap to ${style.name}`}
             >
               <span className="map-style-icon">{style.icon}</span>
-              <span className="map-style-name">{style.name}</span>
+              <span className="map-style-name">{style.shortName}</span>
             </button>
           );
         })}

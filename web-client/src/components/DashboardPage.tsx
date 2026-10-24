@@ -9,7 +9,7 @@ import { Navbar } from "./Navbar";
 import { DashboardPanel } from "./DashboardPanel";
 import { type Location } from "./LocationSearchInput";
 import { reverseGeocode } from "../api/geocode";
-import { SlidersIcon, ShieldCheckIcon } from "./ui/Icons";
+import { ShieldCheckIcon } from "./ui/Icons";
 import { DigitalTwin3D } from "./3d/DigitalTwin3D";
 import { syncLiveApp } from "../utils/syncApp";
 import "./DashboardPage.css";
@@ -97,14 +97,6 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
     }
   };
 
-  const handleToggleSimulator = () => {
-    if (!showAnalytics && !simulationResult) {
-      handleSimulate();
-    } else {
-      setShowAnalytics(!showAnalytics);
-    }
-  };
-
   return (
     <div style={{ width: "100vw", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#030712" }}>
       <Navbar onOpenAuth={onOpenAuth} />
@@ -141,89 +133,41 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
         />
 
         <main className="cockpit-map-viewport" style={{ flex: 1, position: "relative", height: "100%" }}>
-          {/* Spatial Telemetry HUD Chips */}
+          {/* Spatial Telemetry HUD Chips (Top Left) — Non-Overlapping & Compact */}
           <div className="cockpit-hud-top">
             {/* View Mode Switcher: 2D GIS Map vs 3D Urban Digital Twin */}
-            <div 
-              className="cockpit-hud-chip viewmode-chip"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                background: "rgba(3, 7, 18, 0.85)",
-                padding: "3px",
-                borderRadius: "10px",
-                border: "1px solid rgba(0, 240, 255, 0.3)",
-                backdropFilter: "blur(12px)",
-                pointerEvents: "auto",
-                zIndex: 600
-              }}
-            >
+            <div className="cockpit-hud-chip viewmode-chip">
               <button
                 type="button"
                 onClick={() => setViewMode('2d')}
-                style={{
-                  padding: "5px 10px",
-                  borderRadius: "7px",
-                  border: "none",
-                  fontSize: "11px",
-                  fontWeight: "700",
-                  cursor: "pointer",
-                  backgroundColor: viewMode === '2d' ? "rgba(0, 240, 255, 0.25)" : "transparent",
-                  color: viewMode === '2d' ? "#00f0ff" : "#94a3b8",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: viewMode === '2d' ? "rgba(0, 240, 255, 0.6)" : "transparent",
-                  transition: "all 0.15s ease"
-                }}
+                className={`viewmode-toggle-btn ${viewMode === '2d' ? 'active-2d' : ''}`}
+                title="2D Planetary Navigation GIS Map"
               >
-                <span className="viewmode-text-full">🗺️ 2D Navigation GIS</span>
-                <span className="viewmode-text-short">🗺️ 2D</span>
+                <span>🗺️</span>
+                <span>2D Map</span>
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('3d')}
-                style={{
-                  padding: "5px 10px",
-                  borderRadius: "7px",
-                  border: "none",
-                  fontSize: "11px",
-                  fontWeight: "700",
-                  cursor: "pointer",
-                  backgroundColor: viewMode === '3d' ? "rgba(0, 255, 157, 0.25)" : "transparent",
-                  color: viewMode === '3d' ? "#00ff9d" : "#94a3b8",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: viewMode === '3d' ? "rgba(0, 255, 157, 0.6)" : "transparent",
-                  transition: "all 0.15s ease"
-                }}
+                className={`viewmode-toggle-btn ${viewMode === '3d' ? 'active-3d' : ''}`}
+                title="3D Urban Climate Digital Twin"
               >
-                <span className="viewmode-text-full">🏙️ 3D Digital Twin City</span>
-                <span className="viewmode-text-short">🏙️ 3D</span>
+                <span>🏙️</span>
+                <span>3D Twin</span>
               </button>
             </div>
 
-            <div className="cockpit-hud-chip telemetry-chip">
+            <div className="cockpit-hud-chip telemetry-chip" title="Live OSRM & Open-Meteo Sensor Grid Active">
               <span className="cockpit-hud-chip-dot" />
-              <span className="cockpit-hud-chip-label">Telemetry:</span>
-              <span>Live Sensor Grid</span>
+              <span>Live Grid</span>
             </div>
 
             {routeData && (
               <div className="cockpit-hud-chip corridors-chip" style={{ borderColor: 'rgba(16, 185, 129, 0.4)' }}>
-                <ShieldCheckIcon size={14} color="#10b981" />
+                <ShieldCheckIcon size={13} color="#10b981" />
                 <span>{routeData.routes.length} Corridors</span>
               </div>
             )}
-
-            <button 
-              type="button" 
-              className="cockpit-hud-chip clickable lab-chip"
-              onClick={handleToggleSimulator}
-              title="Toggle Digital Twin Simulation Lab"
-            >
-              <SlidersIcon size={14} color="#38bdf8" />
-              <span>{showAnalytics ? "Close Lab" : "Digital Twin Lab"}</span>
-            </button>
           </div>
 
           {viewMode === '2d' ? (

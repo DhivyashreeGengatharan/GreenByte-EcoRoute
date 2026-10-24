@@ -29,69 +29,79 @@
   background: #030712;
 }
 
-/* Spatial HUD Overlay Chips */
+/* Spatial HUD Overlay Chips (Top Left) */
 .cockpit-hud-top {
   position: absolute;
-  top: 16px;
-  left: 20px;
+  top: 14px;
+  left: 16px;
   z-index: 500;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   pointer-events: none;
+  max-width: calc(100% - 250px);
 }
 
 .cockpit-hud-chip {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: rgba(15, 23, 42, 0.85);
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(0, 240, 255, 0.2);
   border-radius: 10px;
   color: #f8fafc;
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 600;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.cockpit-hud-chip.clickable {
+.viewmode-chip {
+  padding: 3px !important;
+  background: rgba(3, 7, 18, 0.88) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+
+.viewmode-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
-.cockpit-hud-chip.clickable:hover {
-  background: rgba(15, 23, 42, 0.95);
+.viewmode-toggle-btn.active-2d {
+  background: rgba(0, 240, 255, 0.22);
+  color: #00f0ff;
+  border-color: rgba(0, 240, 255, 0.6);
+}
+
+.viewmode-toggle-btn.active-3d {
+  background: rgba(0, 255, 157, 0.22);
+  color: #00ff9d;
   border-color: rgba(0, 255, 157, 0.6);
-  box-shadow: 0 0 16px rgba(0, 255, 157, 0.3);
-  transform: translateY(-1px);
 }
 
 .cockpit-hud-chip-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: #00ff9d;
-  box-shadow: 0 0 10px #00ff9d;
-}
-
-.cockpit-hud-chip-label {
-  color: #00f0ff;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-}
-
-.viewmode-text-short {
-  display: none;
-}
-
-.viewmode-text-full {
-  display: inline;
+  box-shadow: 0 0 8px #00ff9d;
+  flex-shrink: 0;
 }
 
 /* Sidebar and Panel Obsidian Styling */
@@ -129,10 +139,16 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   RESPONSIVE ZERO-COLLISION MOBILE SYSTEM (< 960px)
+   RESPONSIVE ZERO-COLLISION RULES (< 1200px, < 960px, < 640px)
    ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  /* On compact screens / laptops, hide non-essential telemetry chip to guarantee clear center space */
+  .cockpit-hud-top .telemetry-chip {
+    display: none !important;
+  }
+}
+
 @media (max-width: 960px) {
-  /* Keep top HUD tightly pinned to left, preventing collision with right map switcher */
   .cockpit-hud-top {
     left: 10px !important;
     top: 10px !important;
@@ -149,19 +165,8 @@
     font-size: 11px;
   }
 
-  /* Only show 2D/3D switcher on mobile HUD; hide wordy desktop chips */
-  .telemetry-chip,
-  .corridors-chip,
-  .lab-chip {
+  .corridors-chip {
     display: none !important;
-  }
-
-  .viewmode-text-full {
-    display: none !important;
-  }
-
-  .viewmode-text-short {
-    display: inline !important;
   }
 
   /* Full-width mobile sheet headers */
