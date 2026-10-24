@@ -331,3 +331,46 @@
   transform: translateY(-1px);
   box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
 }
+
+
+/* High-Density Mobile Navigation Overrides - Zero Wrap / Collision */
+@media (max-width: 640px) {
+  .ecoroute-navbar {
+    padding: 0 12px !important;
+    height: 56px !important;
+  }
+  .nav-brand-section {
+    gap: 8px !important;
+  }
+  .nav-brand-icon-box {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+  }
+  .nav-brand-title {
+    font-size: 15px !important;
+  }
+  .nav-brand-tagline {
+    display: none !important;
+  }
+  .nav-action-section {
+    gap: 6px !important;
+  }
+  .nav-fastag-btn {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+    white-space: nowrap !important;
+  }
+  .nav-ledger-btn {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+    white-space: nowrap !important;
+  }
+  .nav-avatar-btn {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+}
