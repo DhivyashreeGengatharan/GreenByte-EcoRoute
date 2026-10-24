@@ -49,6 +49,14 @@ app.get('/', (req, res) => res.json({ status: 'ok', message: 'GreenByte Backend 
 
 /* ─────────────────── CONFIG ─────────────────── */
 
+/* ── In-Memory Corridor Cache (Sub-40ms recurring query resolution) ── */
+const routeCache = new Map();
+const ROUTE_CACHE_TTL_MS = 1000 * 60 * 60 * 2; // 2 hour cache
+
+function getCorridorCacheKey(orig, dest) {
+  return ${orig.lat.toFixed(3)},->,;
+}
+
 const { MAPBOX_ACCESS_TOKEN, JWT_SECRET, MONGODB_URI } = process.env;
 
 /* ── Timeouts ── */
@@ -741,6 +749,20 @@ app.post('/api/route', async (req, res) => {
     if ([oLat, oLon, dLat, dLon].some(isNaN))
       return res.status(400).json({ error: 'Invalid coordinates' });
 
+    // Check in-memory corridor cache for instant sub-40ms response
+    const cacheKey = getCorridorCacheKey({ lat: oLat, lon: oLon }, { lat: dLat, lon: dLon });
+    if (routeCache.has(cacheKey)) {
+      const cachedEntry = routeCache.get(cacheKey);
+      if (Date.now() - cachedEntry.timestamp < ROUTE_CACHE_TTL_MS) {
+        console.log(⚡ [CORRIDOR CACHE HIT] Returned in ms for );
+        return res.status(200).json({
+          ...cachedEntry.data,
+          cached: true,
+          processingTimeMs: Date.now() - startTime
+        });
+      }
+    }
+
     let ecoRoute = null;
     let shortestRouteId = null;
     let efficiencyDiff = 0;
@@ -1253,4 +1275,4 @@ if (require.main === module || !process.env.VERCEL) {
   server.timeout = 120000;
 }
 
-module.exports = app;
+module.exports = app;

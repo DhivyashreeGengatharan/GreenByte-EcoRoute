@@ -307,3 +307,27 @@
     display: none;
   }
 }
+
+/* FASTag Button in Navbar */
+.nav-fastag-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(0, 255, 157, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%);
+  border: 1px solid rgba(0, 255, 157, 0.4);
+  border-radius: 8px;
+  color: #00ff9d;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 14px rgba(0, 255, 157, 0.15);
+}
+
+.nav-fastag-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 157, 0.25) 0%, rgba(0, 240, 255, 0.25) 100%);
+  border-color: #00ff9d;
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
+}

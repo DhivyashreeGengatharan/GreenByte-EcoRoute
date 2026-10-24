@@ -31,7 +31,7 @@ export const Wallet: React.FC<Props> = ({ userId, credits = 0 }) => {
         return;
       }
 
-      const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+      const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? "https://greenbyte-backend-nine.vercel.app" : "http://localhost:5000");
       await axios.post(
         `${API_BASE}/api/mint-credit`, 
         {

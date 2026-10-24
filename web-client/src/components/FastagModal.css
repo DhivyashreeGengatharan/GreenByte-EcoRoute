@@ -1,0 +1,347 @@
+/* ── FASTag Carbon Redemption Modal CSS ── */
+
+.fastag-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.fastag-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: rgba(11, 17, 32, 0.98);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 255, 157, 0.15);
+  color: #f8fafc;
+  overflow: hidden;
+}
+
+.fastag-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fastag-modal-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.fastag-modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.fastag-badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
+  flex-shrink: 0;
+}
+
+.fastag-modal-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.fastag-modal-subtitle {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+.fastag-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fastag-balance-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(0, 255, 157, 0.08);
+  border: 1px solid rgba(0, 255, 157, 0.25);
+}
+
+.fastag-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fastag-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fastag-select, .fastag-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.fastag-select:focus, .fastag-input:focus {
+  border-color: #00ff9d;
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.25);
+}
+
+.fastag-hint {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.fastag-quick-btn {
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fastag-range-slider {
+  width: 100%;
+  accent-color: #00ff9d;
+  cursor: pointer;
+}
+
+.fastag-summary-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fastag-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.fastag-summary-row.total {
+  padding-top: 4px;
+}
+
+.fastag-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
+}
+
+/* ── Official Pass Voucher Card ── */
+
+.fastag-voucher-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fastag-success-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(0, 255, 157, 0.15);
+  border: 1px solid rgba(0, 255, 157, 0.4);
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #00ff9d;
+  letter-spacing: 0.06em;
+}
+
+.fastag-pass-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(3, 7, 18, 0.98) 100%);
+  border: 2px solid #00ff9d;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 255, 157, 0.2);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fastag-pass-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+  padding-bottom: 12px;
+}
+
+.fastag-logo-mini {
+  background: #ff8800;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.fastag-pass-id {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 800;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.fastag-pass-body {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.fastag-pass-qr-box {
+  width: 104px;
+  height: 104px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.qr-matrix {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  background: #000000;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #00ff9d;
+  background: #000000;
+}
+.qr-corner.top-left { top: 4px; left: 4px; }
+.qr-corner.top-right { top: 4px; right: 4px; }
+.qr-corner.bottom-left { bottom: 4px; left: 4px; }
+.qr-center-icon { font-size: 16px; z-index: 5; }
+
+.qr-scan-label {
+  font-size: 8px;
+  font-weight: 900;
+  color: #000000;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+.fastag-pass-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pass-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.pass-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+
+.pass-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.pass-value.highlight {
+  color: #00f0ff;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+}
+
+.pass-value.highlight-free {
+  color: #00ff9d;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.fastag-pass-footer {
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  padding-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #64748b;
+}

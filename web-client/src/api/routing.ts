@@ -5,7 +5,7 @@ import axios from "axios";
  * Consolidates abort logic, error handling, and correct local endpoint defaults.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? "https://greenbyte-backend-nine.vercel.app" : "http://localhost:5000");
 const API_URL = `${API_BASE}/api/route`;
 
 export interface RouteRequest {

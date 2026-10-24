@@ -1,0 +1,24 @@
+{
+  "name": "EcoRoute — GreenByte Mobility OS",
+  "short_name": "EcoRoute",
+  "description": "Pollution-Aware Spatial Route Planning & Urban Climate Intelligence Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#030712",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-round.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

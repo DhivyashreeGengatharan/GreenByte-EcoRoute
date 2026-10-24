@@ -6,7 +6,7 @@
  * with a resilient fallback directly to Nominatim with accept-language=en.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? "https://greenbyte-backend-nine.vercel.app" : "http://localhost:5000");
 
 export interface GeocodeLocation {
   place_id?: number | string;

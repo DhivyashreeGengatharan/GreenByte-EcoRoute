@@ -353,7 +353,59 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
             </div>
           )}
 
-          {/* Dynamic Optimization Callout */}
+                        {/* Climate Science & Global Warming Equivalencies (BCLE214L) */}
+              <div style={{
+                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%)",
+                border: "1px solid rgba(0, 255, 157, 0.25)",
+                borderRadius: "12px",
+                padding: "14px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                boxShadow: "0 0 20px rgba(0, 255, 157, 0.08)"
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "800", color: "#00ff9d", textTransform: "uppercase", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span>🌍</span>
+                    <span>Global Warming Equivalencies</span>
+                  </span>
+                  <span style={{ fontSize: "10px", color: "#38bdf8", fontFamily: "var(--font-mono, monospace)", fontWeight: "700", background: "rgba(56, 189, 248, 0.15)", padding: "2px 6px", borderRadius: "4px" }}>
+                    IPCC FACTOR
+                  </span>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                  <div style={{ background: "rgba(3, 7, 18, 0.6)", padding: "8px 10px", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <div style={{ fontSize: "10px", color: "#94a3b8", fontWeight: "600" }}>🌳 Tree Absorption</div>
+                    <div style={{ fontSize: "13px", fontWeight: "800", color: "#00ff9d", fontFamily: "var(--font-mono, monospace)", marginTop: "2px" }}>
+                      {((routeData.rewards?.creditsEarned || 15) * 0.046).toFixed(1)} Trees/Yr
+                    </div>
+                  </div>
+
+                  <div style={{ background: "rgba(3, 7, 18, 0.6)", padding: "8px 10px", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <div style={{ fontSize: "10px", color: "#94a3b8", fontWeight: "600" }}>⛽ Petrol Conserved</div>
+                    <div style={{ fontSize: "13px", fontWeight: "800", color: "#38bdf8", fontFamily: "var(--font-mono, monospace)", marginTop: "2px" }}>
+                      {((routeData.rewards?.creditsEarned || 15) * 0.12).toFixed(1)} Litres
+                    </div>
+                  </div>
+
+                  <div style={{ background: "rgba(3, 7, 18, 0.6)", padding: "8px 10px", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <div style={{ fontSize: "10px", color: "#94a3b8", fontWeight: "600" }}>🫁 Lung PM2.5 Shield</div>
+                    <div style={{ fontSize: "13px", fontWeight: "800", color: "#f59e0b", fontFamily: "var(--font-mono, monospace)", marginTop: "2px" }}>
+                      ~64% Exposure ↓
+                    </div>
+                  </div>
+
+                  <div style={{ background: "rgba(3, 7, 18, 0.6)", padding: "8px 10px", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <div style={{ fontSize: "10px", color: "#94a3b8", fontWeight: "600" }}>⚡ FASTag Toll Value</div>
+                    <div style={{ fontSize: "13px", fontWeight: "800", color: "#a855f7", fontFamily: "var(--font-mono, monospace)", marginTop: "2px" }}>
+                      ₹{routeData.rewards?.creditsEarned || 0}.00 Discount
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Optimization Callout */}
           {routeData.optimizationTriggered && (
             <div style={{
               background: "rgba(255, 61, 110, 0.12)",

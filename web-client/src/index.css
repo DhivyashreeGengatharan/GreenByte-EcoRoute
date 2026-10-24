@@ -210,3 +210,13 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     overflow: visible !important;
   }
 }
+
+/* Mobile Safe Area & Notch Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .ecoroute-navbar {
+    padding-top: calc(8px + env(safe-area-inset-top)) !important;
+  }
+  .cockpit-mobile-dock {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  }
+}

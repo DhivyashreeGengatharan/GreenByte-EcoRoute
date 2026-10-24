@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { HistoryModal } from "./HistoryModal";
+import { FastagModal } from "./FastagModal";
 import { 
   LeafIcon, 
   CoinsIcon, 
@@ -22,6 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
   const { user, isAuthenticated, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showFastagModal, setShowFastagModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -95,6 +97,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
 
       {/* Action / User Profile Section */}
       <div className="nav-action-section">
+        {/* FASTag Toll Waiver Quick Trigger */}
+        <button
+          type="button"
+          onClick={() => setShowFastagModal(true)}
+          className="nav-fastag-btn"
+          title="Redeem Carbon Credits for FASTag Toll Fee Waiver"
+        >
+          <span className="fastag-icon">⚡</span>
+          <span className="fastag-text">FASTag Waiver</span>
+        </button>
         {/* Carbon Ledger Quick Access */}
         <button
           type="button"
@@ -188,6 +200,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
         onClose={() => setShowHistoryModal(false)} 
         onOpenAuth={onOpenAuth}
       />
+          {/* FASTag Redemption Modal */}
+      {showFastagModal && (
+        <FastagModal
+          isOpen={showFastagModal}
+          onClose={() => setShowFastagModal(false)}
+        />
+      )}
     </header>
   );
 };
