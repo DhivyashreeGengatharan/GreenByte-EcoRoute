@@ -342,10 +342,70 @@ const SimulationController: React.FC<SimulationControllerProps> = ({
 
 const BENGALURU_CENTER: [number, number] = [12.9716, 77.5946];
 
+type MapStyleKey = 'dark' | 'google' | 'streets' | 'satellite';
+
+const MAP_STYLES: Record<MapStyleKey, {
+  name: string;
+  icon: string;
+  url: string;
+  attribution: string;
+  subdomains?: string;
+  maxZoom: number;
+}> = {
+  dark: {
+    name: 'Cyber Dark',
+    icon: '🌙',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    maxZoom: 16
+  },
+  google: {
+    name: 'Google Maps',
+    icon: '📍',
+    url: 'https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+    subdomains: '0123',
+    attribution: '&copy; Google Maps',
+    maxZoom: 20
+  },
+  streets: {
+    name: 'Daylight Roads',
+    icon: '🗺️',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, TomTom',
+    maxZoom: 19
+  },
+  satellite: {
+    name: 'Satellite',
+    icon: '🛰️',
+    url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+    subdomains: '0123',
+    attribution: '&copy; Google Maps / Satellite',
+    maxZoom: 20
+  }
+};
+
+const MapResizer: React.FC = () => {
+  const map = useMap();
+  useEffect(() => {
+    map.invalidateSize();
+    const t1 = setTimeout(() => map.invalidateSize(), 150);
+    const t2 = setTimeout(() => map.invalidateSize(), 500);
+    const onResize = () => map.invalidateSize();
+    window.addEventListener('resize', onResize);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [map]);
+  return null;
+};
+
 const MapFitBounds: React.FC<{ origin: Location | null; destination: Location | null; routeData: RouteResponse | null }> = ({ origin, destination, routeData }) => {
   const map = useMap();
 
   useEffect(() => {
+    map.invalidateSize();
     if (routeData) {
       const mainRoute = routeData.routes?.find(r => r.id === routeData.ecoRouteId) || routeData.routes?.[0];
       if (mainRoute?.path?.length) {
@@ -531,6 +591,7 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
   setDestination,
   routeData,
 }) => {
+  const [mapStyle, setMapStyle] = useState<MapStyleKey>('google');
   const [isSimulating, setIsSimulating] = useState(false);
   const [shouldRunSim, setShouldRunSim] = useState(false);
 
@@ -617,11 +678,30 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
       >
+        <MapResizer />
         <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-          attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom'
-          maxZoom={16}
+          key={`${mapStyle}-base`}
+          url={MAP_STYLES[mapStyle].url}
+          attribution={MAP_STYLES[mapStyle].attribution}
+          subdomains={MAP_STYLES[mapStyle].subdomains || 'abc'}
+          maxZoom={MAP_STYLES[mapStyle].maxZoom}
         />
+        {mapStyle === 'dark' && (
+          <TileLayer
+            key="dark-ref"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+            attribution="Tiles &copy; Esri"
+            maxZoom={16}
+          />
+        )}
+        {mapStyle === 'satellite' && (
+          <TileLayer
+            key="sat-ref"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+            attribution="Tiles &copy; Esri"
+            maxZoom={19}
+          />
+        )}
         <MapFitBounds origin={origin} destination={destination} routeData={routeData} />
         <MapClickHandler onClick={handleMapClick} />
 
@@ -857,6 +937,57 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
       {routeData && (
         <RouteLegend routeData={routeData} isSimulating={isSimulating} />
       )}
+
+      {/* Map Style Switcher (Top Right) */}
+      <div
+        className="cockpit-map-style-switcher"
+        style={{
+          position: 'absolute',
+          top: '16px',
+          right: '20px',
+          zIndex: 500,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          background: 'rgba(15, 23, 42, 0.88)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          padding: '4px',
+          borderRadius: '10px',
+          border: '1px solid rgba(0, 240, 255, 0.25)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6)'
+        }}
+      >
+        {(['google', 'dark', 'streets', 'satellite'] as MapStyleKey[]).map((key) => {
+          const style = MAP_STYLES[key];
+          const active = mapStyle === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setMapStyle(key)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '5px 10px',
+                borderRadius: '7px',
+                border: active ? '1px solid rgba(0, 240, 255, 0.6)' : '1px solid transparent',
+                background: active ? 'rgba(0, 240, 255, 0.2)' : 'transparent',
+                color: active ? '#00f0ff' : '#94a3b8',
+                fontSize: '11.5px',
+                fontWeight: active ? '700' : '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              title={`Switch basemap to ${style.name}`}
+            >
+              <span style={{ fontSize: '13px' }}>{style.icon}</span>
+              <span>{style.name}</span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* Simulation Trigger Button */}
       <SimulationButton
