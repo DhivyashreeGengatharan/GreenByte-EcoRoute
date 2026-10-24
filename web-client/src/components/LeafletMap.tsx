@@ -462,21 +462,7 @@ const RouteLegend: React.FC<{ routeData: RouteResponse; isSimulating: boolean }>
   });
 
   return (
-    <div style={{
-      position: 'absolute',
-      bottom: '24px',
-      left: '20px',
-      zIndex: 500,
-      background: 'rgba(15, 23, 42, 0.85)',
-      backdropFilter: 'blur(14px)',
-      WebkitBackdropFilter: 'blur(14px)',
-      borderRadius: '12px',
-      padding: '12px 16px',
-      boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-      border: '1px solid rgba(255,255,255,0.12)',
-      minWidth: '240px',
-      color: '#ffffff'
-    }}>
+    <div className="cockpit-route-legend">
       <div style={{
         fontSize: '11px', 
         fontWeight: '700', 
@@ -542,36 +528,11 @@ const SimulationButton: React.FC<{
     type="button"
     onClick={onRun}
     disabled={disabled}
-    style={{
-      position: 'absolute',
-      bottom: '24px',
-      right: '20px',
-      zIndex: 500,
-      padding: '11px 20px',
-      background: disabled && !isSimulating
-        ? 'rgba(30, 41, 59, 0.7)'
-        : isSimulating
-          ? 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)'
-          : 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
-      color: '#ffffff',
-      border: '1px solid rgba(255, 255, 255, 0.15)',
-      borderRadius: '12px',
-      fontWeight: '700',
-      fontSize: '13px',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      boxShadow: isSimulating
-        ? '0 6px 20px rgba(249, 115, 22, 0.4)'
-        : '0 6px 20px rgba(16, 185, 129, 0.35)',
-      transition: 'all 0.2s ease',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      backdropFilter: 'blur(12px)',
-      opacity: disabled && !isSimulating ? 0.6 : 1
-    }}
+    className={`cockpit-sim-btn ${disabled && !isSimulating ? 'disabled' : ''} ${isSimulating ? 'simulating' : ''}`}
   >
-    <span style={{ fontSize: '15px' }}>{isSimulating ? '⏳' : '▶️'}</span>
-    <span>{isSimulating ? 'Simulating Corridor Fleet...' : 'Simulate Fleet Travel'}</span>
+    <span className="sim-btn-icon">{isSimulating ? '⏳' : '▶️'}</span>
+    <span className="sim-btn-text-full">{isSimulating ? 'Simulating Corridor Fleet...' : 'Simulate Fleet Travel'}</span>
+    <span className="sim-btn-text-short">{isSimulating ? 'Simulating...' : 'Simulate Fleet'}</span>
   </button>
 );
 
@@ -939,25 +900,7 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
       )}
 
       {/* Map Style Switcher (Top Right) */}
-      <div
-        className="cockpit-map-style-switcher"
-        style={{
-          position: 'absolute',
-          top: '16px',
-          right: '20px',
-          zIndex: 500,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'rgba(15, 23, 42, 0.88)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          padding: '4px',
-          borderRadius: '10px',
-          border: '1px solid rgba(0, 240, 255, 0.25)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6)'
-        }}
-      >
+      <div className="cockpit-map-style-switcher">
         {(['google', 'dark', 'streets', 'satellite'] as MapStyleKey[]).map((key) => {
           const style = MAP_STYLES[key];
           const active = mapStyle === key;
@@ -966,24 +909,11 @@ export const LeafletMap: React.FC<GreenPathMapProps> = ({
               key={key}
               type="button"
               onClick={() => setMapStyle(key)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '5px 10px',
-                borderRadius: '7px',
-                border: active ? '1px solid rgba(0, 240, 255, 0.6)' : '1px solid transparent',
-                background: active ? 'rgba(0, 240, 255, 0.2)' : 'transparent',
-                color: active ? '#00f0ff' : '#94a3b8',
-                fontSize: '11.5px',
-                fontWeight: active ? '700' : '500',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
+              className={`map-style-btn ${active ? 'active' : ''}`}
               title={`Switch basemap to ${style.name}`}
             >
-              <span style={{ fontSize: '13px' }}>{style.icon}</span>
-              <span>{style.name}</span>
+              <span className="map-style-icon">{style.icon}</span>
+              <span className="map-style-name">{style.name}</span>
             </button>
           );
         })}

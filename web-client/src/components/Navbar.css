@@ -158,7 +158,69 @@
 .nav-action-section {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+}
+
+/* In-App Live Cloud Sync Button */
+.nav-sync-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #00f0ff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+.nav-sync-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: #00f0ff;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
+}
+
+.nav-sync-btn.syncing {
+  border-color: #00ff9d;
+  color: #00ff9d;
+}
+
+.nav-sync-icon.spinning {
+  display: inline-block;
+  animation: syncSpin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes syncSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* FASTag Button in Navbar */
+.nav-fastag-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(0, 255, 157, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%);
+  border: 1px solid rgba(0, 255, 157, 0.4);
+  border-radius: 8px;
+  color: #00ff9d;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 14px rgba(0, 255, 157, 0.15);
+}
+
+.nav-fastag-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 157, 0.25) 0%, rgba(0, 240, 255, 0.25) 100%);
+  border-color: #00ff9d;
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
 }
 
 .nav-ledger-btn {
@@ -188,14 +250,14 @@
 }
 
 .nav-avatar-btn {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid #00ff9d;
   background: linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%);
   color: #030712;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13.5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,7 +354,7 @@
   color: #ff3d6e;
 }
 
-/* Mobile adjustments */
+/* Mobile responsive adjustments */
 @media (max-width: 860px) {
   .nav-engine-chip {
     display: none;
@@ -301,51 +363,27 @@
 
 @media (max-width: 640px) {
   .ecoroute-navbar {
-    padding: 0 16px;
+    padding: 0 12px;
+    height: 56px;
   }
   .nav-center-links {
     display: none;
   }
 }
 
-/* FASTag Button in Navbar */
-.nav-fastag-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: linear-gradient(135deg, rgba(0, 255, 157, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%);
-  border: 1px solid rgba(0, 255, 157, 0.4);
-  border-radius: 8px;
-  color: #00ff9d;
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  box-shadow: 0 0 14px rgba(0, 255, 157, 0.15);
-}
-
-.nav-fastag-btn:hover {
-  background: linear-gradient(135deg, rgba(0, 255, 157, 0.25) 0%, rgba(0, 240, 255, 0.25) 100%);
-  border-color: #00ff9d;
-  transform: translateY(-1px);
-  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
-}
-
-
-/* High-Density Mobile Navigation Overrides - Zero Wrap / Collision */
-@media (max-width: 640px) {
+/* High-Density Mobile Navigation Overrides - Zero Wrap / Zero Collision */
+@media (max-width: 768px) {
   .ecoroute-navbar {
-    padding: 0 12px !important;
-    height: 56px !important;
+    padding: 0 10px !important;
+    height: 54px !important;
   }
   .nav-brand-section {
     gap: 8px !important;
   }
   .nav-brand-icon-box {
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
   }
   .nav-brand-title {
     font-size: 15px !important;
@@ -354,23 +392,46 @@
     display: none !important;
   }
   .nav-action-section {
-    gap: 6px !important;
+    gap: 5px !important;
   }
-  .nav-fastag-btn {
-    padding: 4px 8px !important;
-    font-size: 11px !important;
-    gap: 4px !important;
-    white-space: nowrap !important;
-  }
+  .nav-sync-btn,
+  .nav-fastag-btn,
   .nav-ledger-btn {
-    padding: 4px 8px !important;
+    padding: 4px 7px !important;
     font-size: 11px !important;
-    gap: 4px !important;
+    gap: 3px !important;
     white-space: nowrap !important;
   }
   .nav-avatar-btn {
     width: 28px !important;
     height: 28px !important;
     font-size: 11px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* On compact phones: show compact labels to guarantee zero overflow */
+  .nav-sync-btn .nav-btn-text,
+  .nav-ledger-btn .nav-btn-text {
+    display: none !important;
+  }
+  .nav-sync-btn,
+  .nav-ledger-btn {
+    padding: 5px 8px !important;
+    border-radius: 7px !important;
+  }
+  .nav-fastag-btn {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  /* Ultra-compact phones (<=375px) */
+  .nav-fastag-btn .nav-btn-text {
+    display: none !important;
+  }
+  .nav-brand-title {
+    font-size: 14px !important;
   }
 }

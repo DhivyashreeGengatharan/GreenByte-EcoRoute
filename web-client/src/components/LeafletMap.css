@@ -1,4 +1,4 @@
-/* Leaflet Map Enhanced Styling */
+/* Leaflet Map Enhanced Styling - Obsidian Cyber-Neon Theme */
 
 .leaflet-container {
   width: 100% !important;
@@ -129,23 +129,174 @@
 
 /* Attribution Styling */
 .leaflet-attribution {
-  background: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(15, 23, 42, 0.75) !important;
   backdrop-filter: blur(4px);
   border-radius: 6px 0 0 0;
   font-size: 10px !important;
-  color: #64748b !important;
-}
-
-[data-theme='dark'] .leaflet-attribution {
-  background: rgba(15, 23, 42, 0.75) !important;
   color: #94a3b8 !important;
 }
 
-/* Map Style Switcher Responsiveness */
+/* Map Style Switcher (Top Right) */
+.cockpit-map-style-switcher {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.map-style-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-style-btn:hover {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.map-style-btn.active {
+  border: 1px solid rgba(0, 240, 255, 0.6);
+  background: rgba(0, 240, 255, 0.2);
+  color: #00f0ff;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.map-style-icon {
+  font-size: 13px;
+}
+
+.map-style-name {
+  display: inline;
+}
+
+/* Simulation Button */
+.cockpit-sim-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 20px;
+  z-index: 500;
+  padding: 11px 20px;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(12px);
+}
+
+.cockpit-sim-btn:hover:not(.disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+.cockpit-sim-btn.simulating {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+}
+
+.cockpit-sim-btn.disabled {
+  background: rgba(30, 41, 59, 0.7);
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sim-btn-text-short {
+  display: none;
+}
+
+/* Route Legend Desktop */
+.cockpit-route-legend {
+  position: absolute;
+  bottom: 24px;
+  left: 20px;
+  z-index: 500;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  min-width: 240px;
+  color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE ZERO-COLLISION OVERRIDES (< 960px & < 640px)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  /* Hide the full legend on mobile because the user has the 'Report' sheet tab */
+  .cockpit-route-legend {
+    display: none !important;
+  }
+
+  /* Elevate Simulation button cleanly above mobile bottom dock */
+  .cockpit-sim-btn {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 14px !important;
+    padding: 8px 14px !important;
+    font-size: 11.5px !important;
+    border-radius: 9999px !important;
+  }
+
+  .sim-btn-text-full {
+    display: none !important;
+  }
+
+  .sim-btn-text-short {
+    display: inline !important;
+  }
+}
+
 @media (max-width: 768px) {
+  /* Compact map style switcher in top-right without text names */
   .cockpit-map-style-switcher {
-    top: auto !important;
-    bottom: 84px !important;
-    right: 12px !important;
+    top: 10px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    padding: 3px !important;
+    gap: 2px !important;
+    border-radius: 8px !important;
+  }
+
+  .map-style-name {
+    display: none !important;
+  }
+
+  .map-style-btn {
+    padding: 4px 7px !important;
+  }
+
+  .map-style-icon {
+    font-size: 14px !important;
   }
 }

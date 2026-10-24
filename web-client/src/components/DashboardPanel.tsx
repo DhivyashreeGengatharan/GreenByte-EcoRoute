@@ -14,6 +14,7 @@ interface DashboardPanelProps {
   onCarbonStored?: () => void;
   mobileOpen?: boolean;
   routeError?: string | null;
+  onCloseMobile?: () => void;
 }
 
 export const DashboardPanel: React.FC<DashboardPanelProps> = ({ 
@@ -22,7 +23,8 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
   onOpenAuth,
   onCarbonStored,
   mobileOpen = false,
-  routeError = null
+  routeError = null,
+  onCloseMobile
 }) => {
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [pipelineStage, setPipelineStage] = useState(1);
@@ -65,6 +67,25 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
         zIndex: 600,
         color: "#f8fafc"
       }}>
+      {/* Mobile Sheet Header & Dismiss Action */}
+      <div className="mobile-sheet-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '16px' }}>📊</span>
+          <span style={{ fontWeight: 800, fontSize: '14px', color: '#f8fafc' }}>Corridor Analytics</span>
+        </div>
+        {onCloseMobile && (
+          <button type="button" className="mobile-sheet-close-btn" onClick={onCloseMobile}>
+            ✕ View Map
+          </button>
+        )}
+      </div>
+        {onCloseMobile && (
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
+            <button type="button" className="mobile-sheet-close-btn" onClick={onCloseMobile}>
+              ✕ Close
+            </button>
+          </div>
+        )}
         <div style={{
           width: "60px",
           height: "60px",

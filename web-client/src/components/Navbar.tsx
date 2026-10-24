@@ -12,6 +12,7 @@ import {
   ActivityIcon 
 } from "./ui/Icons";
 import Button from "./ui/Button";
+import { syncLiveApp } from "../utils/syncApp";
 import "./Navbar.css";
 
 interface NavbarProps {
@@ -24,6 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showFastagModal, setShowFastagModal] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -41,6 +43,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
+  };
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await syncLiveApp();
+    setTimeout(() => setIsSyncing(false), 2000);
   };
 
   return (
@@ -97,7 +105,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
 
       {/* Action / User Profile Section */}
       <div className="nav-action-section">
-                {/* FASTag Toll Waiver Quick Trigger */}
+        {/* In-App Live Cloud Sync Button */}
+        <button
+          type="button"
+          onClick={handleSync}
+          className={`nav-sync-btn ${isSyncing ? 'syncing' : ''}`}
+          title="Pull & reload latest live cloud updates without reinstalling APK"
+        >
+          <span className={`nav-sync-icon ${isSyncing ? 'spinning' : ''}`}>🔄</span>
+          <span className="nav-btn-text">Sync Live</span>
+        </button>
+
+        {/* FASTag Toll Waiver Quick Trigger */}
         <button
           type="button"
           onClick={() => setShowFastagModal(true)}
@@ -105,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
           title="Redeem Carbon Credits for FASTag Toll Fee Waiver"
         >
           <span style={{ fontSize: "14px" }}>⚡</span>
-          <span>FASTag Waiver</span>
+          <span className="nav-btn-text">FASTag Waiver</span>
         </button>
 
         {/* Carbon Ledger Quick Access */}
@@ -116,7 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
           title="Open Carbon Credits Ledger"
         >
           <CoinsIcon size={16} color="#10b981" />
-          <span>Ledger</span>
+          <span className="nav-btn-text">Ledger</span>
         </button>
 
         {/* User Account / Sign In */}
@@ -196,7 +215,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
       </div>
 
       {/* Credits / History Modal */}
-            <FastagModal
+      <FastagModal
         isOpen={showFastagModal}
         onClose={() => setShowFastagModal(false)}
         onOpenAuth={onOpenAuth}

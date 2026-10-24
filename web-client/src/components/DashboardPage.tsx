@@ -11,6 +11,7 @@ import { type Location } from "./LocationSearchInput";
 import { reverseGeocode } from "../api/geocode";
 import { SlidersIcon, ShieldCheckIcon } from "./ui/Icons";
 import { DigitalTwin3D } from "./3d/DigitalTwin3D";
+import { syncLiveApp } from "../utils/syncApp";
 import "./DashboardPage.css";
 
 interface DashboardPageProps {
@@ -54,6 +55,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
       );
       setRouteData(data);
       setRouteError(null);
+      // Close mobile planner to reveal map and route
+      setMobileSidebarOpen(false);
     } catch (err: any) {
       console.error(err);
       const errMsg = err.message || "No road route available";
@@ -133,6 +136,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
           destination={destination}
           loading={loading}
           mobileOpen={mobileSidebarOpen}
+          onCloseMobile={() => setMobileSidebarOpen(false)}
           routeError={routeError}
         />
 
@@ -141,7 +145,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
           <div className="cockpit-hud-top">
             {/* View Mode Switcher: 2D GIS Map vs 3D Urban Digital Twin */}
             <div 
-              className="cockpit-hud-chip"
+              className="cockpit-hud-chip viewmode-chip"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -158,7 +162,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
                 type="button"
                 onClick={() => setViewMode('2d')}
                 style={{
-                  padding: "5px 12px",
+                  padding: "5px 10px",
                   borderRadius: "7px",
                   border: "none",
                   fontSize: "11px",
@@ -172,13 +176,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
                   transition: "all 0.15s ease"
                 }}
               >
-                🗺️ 2D Navigation GIS
+                <span className="viewmode-text-full">🗺️ 2D Navigation GIS</span>
+                <span className="viewmode-text-short">🗺️ 2D</span>
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('3d')}
                 style={{
-                  padding: "5px 12px",
+                  padding: "5px 10px",
                   borderRadius: "7px",
                   border: "none",
                   fontSize: "11px",
@@ -192,18 +197,19 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
                   transition: "all 0.15s ease"
                 }}
               >
-                🏙️ 3D Digital Twin City
+                <span className="viewmode-text-full">🏙️ 3D Digital Twin City</span>
+                <span className="viewmode-text-short">🏙️ 3D</span>
               </button>
             </div>
 
-            <div className="cockpit-hud-chip">
+            <div className="cockpit-hud-chip telemetry-chip">
               <span className="cockpit-hud-chip-dot" />
               <span className="cockpit-hud-chip-label">Telemetry:</span>
               <span>Live Sensor Grid</span>
             </div>
 
             {routeData && (
-              <div className="cockpit-hud-chip" style={{ borderColor: 'rgba(16, 185, 129, 0.4)' }}>
+              <div className="cockpit-hud-chip corridors-chip" style={{ borderColor: 'rgba(16, 185, 129, 0.4)' }}>
                 <ShieldCheckIcon size={14} color="#10b981" />
                 <span>{routeData.routes.length} Corridors</span>
               </div>
@@ -211,7 +217,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
 
             <button 
               type="button" 
-              className="cockpit-hud-chip clickable"
+              className="cockpit-hud-chip clickable lab-chip"
               onClick={handleToggleSimulator}
               title="Toggle Digital Twin Simulation Lab"
             >
@@ -260,8 +266,21 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
             />
           )}
 
-          {/* Mobile Bottom Dock */}
+          {/* Mobile Bottom Dock — Zero-Collision Responsive Control */}
           <div className="cockpit-mobile-dock">
+            <button
+              type="button"
+              className={`cockpit-mobile-dock-btn ${!mobileSidebarOpen && !mobilePanelOpen ? 'active' : ''}`}
+              onClick={() => {
+                setMobileSidebarOpen(false);
+                setMobilePanelOpen(false);
+              }}
+              title="View Navigation Map"
+            >
+              <span>🗺️</span>
+              <span>Map</span>
+            </button>
+
             <button
               type="button"
               className={`cockpit-mobile-dock-btn ${mobileSidebarOpen ? 'active' : ''}`}
@@ -269,6 +288,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
                 setMobileSidebarOpen(!mobileSidebarOpen);
                 setMobilePanelOpen(false);
               }}
+              title="Open Route Planner"
             >
               <span>📍</span>
               <span>Planner</span>
@@ -282,11 +302,22 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
                   setMobilePanelOpen(!mobilePanelOpen);
                   setMobileSidebarOpen(false);
                 }}
+                title="View Corridors Comparison & Carbon Credits"
               >
                 <span>📊</span>
                 <span>Report</span>
               </button>
             )}
+
+            <button
+              type="button"
+              className="cockpit-mobile-dock-btn sync-btn"
+              onClick={syncLiveApp}
+              title="Sync latest live updates from cloud"
+            >
+              <span>🔄</span>
+              <span>Sync</span>
+            </button>
           </div>
         </main>
 
@@ -296,6 +327,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
           loading={loading}
           onOpenAuth={onOpenAuth}
           mobileOpen={mobilePanelOpen}
+          onCloseMobile={() => setMobilePanelOpen(false)}
           routeError={routeError}
           onCarbonStored={() => {
             console.log('Carbon credits stored successfully');

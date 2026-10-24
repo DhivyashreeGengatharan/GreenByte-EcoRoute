@@ -86,6 +86,14 @@
   letter-spacing: 0.05em;
 }
 
+.viewmode-text-short {
+  display: none;
+}
+
+.viewmode-text-full {
+  display: inline;
+}
+
 /* Sidebar and Panel Obsidian Styling */
 .sidebar-container {
   background: rgba(11, 17, 32, 0.95);
@@ -104,11 +112,7 @@
   display: none;
 }
 
-/* Mobile / Tablet Drawer Adjustments */
-
-/* ═══════════════════════════════════════════════════════════════════
-   CLEAN MOBILE TABBED DRAWER SYSTEM — ZERO OVERLAP & ZERO COLLISION
-   ═══════════════════════════════════════════════════════════════════ */
+/* Mobile Sheet Headers (Hidden on desktop) */
 .mobile-sheet-header {
   display: none;
 }
@@ -124,30 +128,45 @@
   margin-left: 4px;
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE ZERO-COLLISION MOBILE SYSTEM (< 960px)
+   ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
+  /* Keep top HUD tightly pinned to left, preventing collision with right map switcher */
   .cockpit-hud-top {
-    left: 8px;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    left: 10px !important;
+    top: 10px !important;
+    right: auto !important;
+    max-width: calc(100vw - 140px) !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
     pointer-events: none;
   }
 
   .cockpit-hud-chip {
     padding: 4px 8px;
-    font-size: 10.5px;
+    font-size: 11px;
   }
 
-  /* Hide desktop-heavy simulator chip on mobile */
-  .cockpit-hud-chip.clickable {
+  /* Only show 2D/3D switcher on mobile HUD; hide wordy desktop chips */
+  .telemetry-chip,
+  .corridors-chip,
+  .lab-chip {
     display: none !important;
+  }
+
+  .viewmode-text-full {
+    display: none !important;
+  }
+
+  .viewmode-text-short {
+    display: inline !important;
   }
 
   /* Full-width mobile sheet headers */
   .mobile-sheet-header {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     padding: 14px 18px;
@@ -173,7 +192,7 @@
     color: #ffffff;
   }
 
-  /* Dedicated Non-Overlapping Mobile Route Planner */
+  /* Dedicated Non-Overlapping Mobile Route Planner Sheet */
   .sidebar-container {
     position: absolute !important;
     top: 0 !important;
@@ -194,7 +213,7 @@
     transform: translateY(0) !important;
   }
 
-  /* Dedicated Non-Overlapping Mobile Corridors Report */
+  /* Dedicated Non-Overlapping Mobile Corridors Report Sheet */
   .dashboard-panel {
     position: absolute !important;
     top: 0 !important;
@@ -208,7 +227,7 @@
     transform: translateY(100%);
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
-    padding: 16px 16px 90px 16px !important;
+    padding: 0 0 90px 0 !important;
   }
 
   .dashboard-panel.mobile-open {
@@ -232,9 +251,9 @@
     background: rgba(15, 23, 42, 0.94);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    padding: 5px 8px;
+    padding: 6px 10px;
     border-radius: 9999px;
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    border: 1px solid rgba(0, 240, 255, 0.35);
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 157, 0.15);
     white-space: nowrap;
   }
@@ -259,5 +278,27 @@
     color: #00ff9d;
     border-color: rgba(0, 255, 157, 0.5);
     box-shadow: 0 0 14px rgba(0, 255, 157, 0.25);
+  }
+
+  .cockpit-mobile-dock-btn.sync-btn {
+    color: #00f0ff;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+  }
+
+  .cockpit-mobile-dock-btn.sync-btn:active {
+    background: rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+  }
+}
+
+@media (max-width: 380px) {
+  .cockpit-mobile-dock {
+    padding: 4px 6px !important;
+    gap: 4px !important;
+  }
+  .cockpit-mobile-dock-btn {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
   }
 }

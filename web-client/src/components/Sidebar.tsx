@@ -17,6 +17,7 @@ interface Props {
   loading: boolean;
   mobileOpen?: boolean;
   routeError?: string | null;
+  onCloseMobile?: () => void;
 }
 
 const interventions = [
@@ -83,6 +84,7 @@ export const Sidebar: React.FC<Props> = ({
   loading,
   mobileOpen = false,
   routeError = null,
+  onCloseMobile,
 }) => {
   const [activeTab, setActiveTab] = useState<'routing' | 'interventions'>('routing');
   const [locating, setLocating] = useState(false);
@@ -131,6 +133,18 @@ export const Sidebar: React.FC<Props> = ({
       overflow: "hidden",
       boxShadow: "4px 0 30px rgba(0, 0, 0, 0.6)"
     }}>
+      {/* Mobile Sheet Header & Dismiss Action */}
+      <div className="mobile-sheet-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '16px' }}>📍</span>
+          <span style={{ fontWeight: 800, fontSize: '14px', color: '#f8fafc' }}>Corridor Planner</span>
+        </div>
+        {onCloseMobile && (
+          <button type="button" className="mobile-sheet-close-btn" onClick={onCloseMobile}>
+            ✕ View Map
+          </button>
+        )}
+      </div>
       {/* Sidebar Segmented Mode Switcher */}
       <div style={{
         padding: "16px 20px 0 20px",
