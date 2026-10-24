@@ -220,3 +220,15 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   TOAST HIGH-PRIORITY ELEVATION (In front of modals and backdrops)
+   ═══════════════════════════════════════════════════════════════════ */
+div[data-toaster-container],
+.toaster-container,
+[id^="toast-"],
+.go3958317564,
+.go2072408551 {
+  z-index: 99999999 !important;
+  pointer-events: auto !important;
+}

@@ -16,6 +16,7 @@ interface Props {
   destination: Location | null;
   loading: boolean;
   mobileOpen?: boolean;
+  routeError?: string | null;
 }
 
 const interventions = [
@@ -81,6 +82,7 @@ export const Sidebar: React.FC<Props> = ({
   destination,
   loading,
   mobileOpen = false,
+  routeError = null,
 }) => {
   const [activeTab, setActiveTab] = useState<'routing' | 'interventions'>('routing');
   const [locating, setLocating] = useState(false);
@@ -335,6 +337,29 @@ export const Sidebar: React.FC<Props> = ({
               >
                 {loading ? "Calculating Multi-Factor Corridors..." : "Calculate Green Route"}
               </Button>
+
+              {routeError && (
+                <div style={{
+                  marginTop: "10px",
+                  padding: "12px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(239, 68, 68, 0.12)",
+                  border: "1px solid rgba(239, 68, 68, 0.4)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px"
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#f87171", fontWeight: "800", fontSize: "12px" }}>
+                    <span>🌊</span>
+                    <span>No Road Route Available</span>
+                  </div>
+                  <div style={{ color: "#cbd5e1", fontSize: "11px", lineHeight: "1.4" }}>
+                    {routeError.includes("sea") || routeError.includes("water")
+                      ? "A sea or water barrier separates the selected locations. No drivable road network exists between these coordinates."
+                      : routeError}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Quick Tips */}

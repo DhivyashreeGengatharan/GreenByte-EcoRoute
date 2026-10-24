@@ -5,7 +5,7 @@ import axios from "axios";
  * Consolidates abort logic, error handling, and correct local endpoint defaults.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? "https://greenbyte-backend-nine.vercel.app" : "http://localhost:5000");
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 const API_URL = `${API_BASE}/api/route`;
 
 export interface RouteRequest {
@@ -112,7 +112,7 @@ export async function calculateRoute(
     }
 
     if (!data.routes || !Array.isArray(data.routes) || data.routes.length === 0) {
-      throw new Error("No routes found for the selected locations.");
+      throw new Error(data.error || "No road route available (separated by sea or water body with no connected road network).");
     }
 
     return data;

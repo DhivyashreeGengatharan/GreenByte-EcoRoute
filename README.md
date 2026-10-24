@@ -101,4 +101,3 @@ This project is licensed under the MIT License.
 
 ## Contact
 For questions or support, please open an issue in the repository.
-<!-- build-trigger-20261024225934 -->

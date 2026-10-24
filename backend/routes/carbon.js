@@ -115,13 +115,14 @@ router.post('/store', verifyToken, async (req, res) => {
     console.log('✅ Record inserted with ID:', result.insertedId);
 
     // Aggregate credits into User document
-    console.log('🏢 Syncing total credits to User profile...');
+    const earnedCredits = Math.max(1, Math.round(req.body.creditsEarned || carbonValue || 1));
+    console.log(`🏢 Syncing ${earnedCredits} earned credits and ${carbonValue} carbon to User profile...`);
     await usersCollection.updateOne(
       { _id: userObjectId },
       { 
         $inc: { 
           totalCarbonSaved: carbonValue, 
-          totalCreditsSaved: 1 
+          totalCreditsSaved: earnedCredits 
         },
         $set: { updatedAt: new Date() }
       }
@@ -230,6 +231,7 @@ router.get('/stats', verifyToken, async (req, res) => {
     });
   }
 });
+
 
 /**
  * Predefined Toll Plazas with standard rates
@@ -394,4 +396,3 @@ router.post('/redeem-fastag', verifyToken, async (req, res) => {
 });
 
 module.exports = router;
-

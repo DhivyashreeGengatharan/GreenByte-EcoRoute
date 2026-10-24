@@ -13,6 +13,7 @@ interface DashboardPanelProps {
   onOpenAuth?: (callback?: () => void) => void;
   onCarbonStored?: () => void;
   mobileOpen?: boolean;
+  routeError?: string | null;
 }
 
 export const DashboardPanel: React.FC<DashboardPanelProps> = ({ 
@@ -20,7 +21,8 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
   loading,
   onOpenAuth,
   onCarbonStored,
-  mobileOpen = false
+  mobileOpen = false,
+  routeError = null
 }) => {
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [pipelineStage, setPipelineStage] = useState(1);
@@ -44,6 +46,60 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
     { label: "Pareto Multi-Objective Engine", status: pipelineStage > 5 ? "done" : pipelineStage === 5 ? "running" : "pending" },
     { label: "Verified Carbon Ledger Staking", status: pipelineStage >= 6 ? "done" : "pending" },
   ];
+
+    if (routeError && !loading) {
+    return (
+      <div className={`dashboard-panel ${mobileOpen ? 'mobile-open' : ''}`} style={{
+        width: "360px",
+        height: "100%",
+        background: "rgba(11, 17, 32, 0.96)",
+        backdropFilter: "blur(20px)",
+        borderLeft: "1px solid rgba(239, 68, 68, 0.3)",
+        padding: "24px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        gap: "14px",
+        zIndex: 600,
+        color: "#f8fafc"
+      }}>
+        <div style={{
+          width: "60px",
+          height: "60px",
+          borderRadius: "16px",
+          background: "rgba(239, 68, 68, 0.12)",
+          border: "1px solid rgba(239, 68, 68, 0.35)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "28px"
+        }}>
+          🌊
+        </div>
+        <h3 style={{ margin: 0, fontSize: "17px", fontWeight: "800", color: "#f87171" }}>
+          No Road Route Available
+        </h3>
+        <p style={{ margin: 0, fontSize: "12.5px", color: "#94a3b8", lineHeight: 1.5, maxWidth: "280px" }}>
+          {routeError.includes("sea") || routeError.includes("water")
+            ? "A sea or water barrier separates the selected locations. No drivable road network exists between these coordinates."
+            : routeError}
+        </p>
+        <div style={{
+          fontSize: "11px",
+          color: "#38bdf8",
+          background: "rgba(56, 189, 248, 0.1)",
+          border: "1px solid rgba(56, 189, 248, 0.25)",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          marginTop: "6px"
+        }}>
+          💡 Select locations connected by mainland roads
+        </div>
+      </div>
+    );
+  }
 
   if (!routeData && !loading) return null;
 
@@ -183,22 +239,17 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
                       <Badge variant={badgeVariant} size="sm">
                         {badgeLabel}
                       </Badge>
-                      {(() => {
-                        const ecoPercent = Math.min(100, Math.max(0, Math.round(
-                          (route.summary.carbon / (route.summary.distanceKm * 5)) * 100
-                        )));
-                        const barColor = ecoPercent >= 70 ? "#00ff9d" : ecoPercent >= 45 ? "#ffb800" : "#ff3d6e";
-                        return (
-                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <span style={{ fontSize: "11px", fontWeight: "700", color: barColor }}>
-                              🌿 {ecoPercent}% Eco
-                            </span>
-                            <div style={{ width: "52px", height: "5px", borderRadius: "3px", background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
-                              <div style={{ width: `${ecoPercent}%`, height: "100%", borderRadius: "3px", background: barColor, transition: "width 0.6s ease" }} />
-                            </div>
-                          </div>
-                        );
-                      })()}
+                      <span style={{
+                        fontSize: "13px",
+                        fontWeight: "800",
+                        fontFamily: "var(--font-mono, monospace)",
+                        color: route.summary.carbon >= 80 ? "#00ff9d" : route.summary.carbon >= 50 ? "#ffb800" : "#ff3d6e",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "3px"
+                      }}>
+                        Score: <AnimatedCounter value={route.summary.carbon} />
+                      </span>
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12.5px", color: "#94a3b8" }}>
@@ -209,6 +260,10 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
                       <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                         <ClockIcon size={14} color="#ffb800" />
                         <strong style={{ color: "#f8fafc" }}>{route.summary.durationMin} min</strong>
+                      </span>
+                      <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                        <WindIcon size={14} color="#00ff9d" />
+                        <span>AQI {route.summary.averageAQI}</span>
                       </span>
                     </div>
                   </button>
@@ -353,7 +408,8 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
             </div>
           )}
 
-                        {/* Climate Science & Global Warming Equivalencies (BCLE214L) */}
+          
+              {/* Climate Science & Global Warming Equivalencies (BCLE214L) */}
               <div style={{
                 background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%)",
                 border: "1px solid rgba(0, 255, 157, 0.25)",
@@ -405,7 +461,7 @@ export const DashboardPanel: React.FC<DashboardPanelProps> = ({
                 </div>
               </div>
 
-              {/* Dynamic Optimization Callout */}
+          {/* Dynamic Optimization Callout */}
           {routeData.optimizationTriggered && (
             <div style={{
               background: "rgba(255, 61, 110, 0.12)",

@@ -1,99 +1,153 @@
-/* ── FASTag Carbon Redemption Modal CSS ── */
+/* ═══════════════════════════════════════════════════════════════════
+   FASTag Carbon Redemption Modal CSS — GreenByte Phase 2
+   Responsive, Scrollable, and Fully Viewport-Safe
+   ═══════════════════════════════════════════════════════════════════ */
 
 .fastag-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 7, 18, 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  padding: 16px;
-  animation: modalFadeIn 0.2s ease-out;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(3, 7, 18, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  padding: 20px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  animation: fastagFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes fastagFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .fastag-modal-content {
   position: relative;
   width: 100%;
-  max-width: 520px;
-  background: rgba(11, 17, 32, 0.98);
-  border: 1px solid rgba(0, 240, 255, 0.25);
+  max-width: 540px;
+  max-height: min(88vh, 780px);
+  background: #0b1120;
+  border: 1px solid rgba(0, 240, 255, 0.35);
   border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 255, 157, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 255, 157, 0.15);
   color: #f8fafc;
-  overflow: hidden;
-}
-
-.fastag-modal-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  flex-direction: column;
+  overflow: hidden;
+  margin: auto;
 }
 
-.fastag-modal-close:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-}
-
+/* ── Sticky / Fixed Header ── */
 .fastag-modal-header {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.fastag-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .fastag-badge-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
+  box-shadow: 0 0 16px rgba(0, 255, 157, 0.4);
   flex-shrink: 0;
 }
 
 .fastag-modal-title {
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 800;
   color: #ffffff;
   margin: 0;
+  line-height: 1.2;
   letter-spacing: -0.01em;
 }
 
 .fastag-modal-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #94a3b8;
-  margin: 4px 0 0 0;
-  line-height: 1.4;
+  margin: 3px 0 0 0;
+  line-height: 1.3;
 }
 
+.fastag-modal-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.fastag-modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+  transform: scale(1.05);
+}
+
+/* ── Scrollable Body ── */
 .fastag-modal-body {
+  padding: 18px 22px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex: 1;
 }
 
+/* Custom Scrollbar */
+.fastag-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.fastag-modal-body::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+.fastag-modal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.25);
+  border-radius: 3px;
+}
+.fastag-modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.45);
+}
+
+/* ── Balance Strip ── */
 .fastag-balance-strip {
   display: flex;
   align-items: center;
@@ -101,9 +155,10 @@
   padding: 12px 16px;
   border-radius: 12px;
   background: rgba(0, 255, 157, 0.08);
-  border: 1px solid rgba(0, 255, 157, 0.25);
+  border: 1px solid rgba(0, 255, 157, 0.3);
 }
 
+/* ── Form Controls ── */
 .fastag-form-group {
   display: flex;
   flex-direction: column;
@@ -111,60 +166,107 @@
 }
 
 .fastag-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.fastag-select, .fastag-input {
+.fastag-select,
+.fastag-input {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 14px;
   background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 240, 255, 0.25);
   border-radius: 10px;
   color: #ffffff;
   font-size: 13.5px;
   font-weight: 600;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
-.fastag-select:focus, .fastag-input:focus {
+.fastag-select:focus,
+.fastag-input:focus {
   border-color: #00ff9d;
-  box-shadow: 0 0 12px rgba(0, 255, 157, 0.25);
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.3);
 }
 
-.fastag-hint {
+.fastag-select option {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 8px;
+}
+
+/* Quick Plaza Pills */
+.fastag-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.fastag-plaza-pill {
+  padding: 4px 9px;
+  border-radius: 6px;
   font-size: 11px;
-  color: #64748b;
-  margin-top: 2px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  transition: all 0.15s ease;
 }
 
+.fastag-plaza-pill:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.4);
+  color: #00f0ff;
+}
+
+.fastag-plaza-pill.active {
+  background: rgba(0, 255, 157, 0.18);
+  border-color: rgba(0, 255, 157, 0.6);
+  color: #00ff9d;
+}
+
+/* Quick Input Helper */
 .fastag-quick-btn {
   background: rgba(0, 240, 255, 0.12);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #00f0ff;
   border-radius: 8px;
-  padding: 0 14px;
-  font-size: 12px;
+  padding: 0 12px;
+  font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.fastag-quick-btn:hover {
+  background: rgba(0, 240, 255, 0.25);
+  transform: translateY(-1px);
 }
 
 .fastag-range-slider {
   width: 100%;
   accent-color: #00ff9d;
   cursor: pointer;
+  height: 6px;
+  margin-top: 4px;
 }
 
+/* ── Summary Card ── */
 .fastag-summary-card {
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -184,11 +286,73 @@
 .fastag-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.08);
-  margin: 4px 0;
+  margin: 2px 0;
 }
 
-/* ── Official Pass Voucher Card ── */
+/* ── Sticky Modal Footer ── */
+.fastag-modal-footer {
+  padding: 14px 22px;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
 
+.fastag-btn-cancel {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fastag-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.fastag-btn-submit {
+  flex: 2;
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00ff9d 0%, #00cc7e 100%);
+  border: none;
+  color: #030712;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.35);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fastag-btn-submit:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px rgba(0, 255, 157, 0.5);
+}
+
+.fastag-btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+/* ── Digital Voucher Screen ── */
 .fastag-voucher-container {
   display: flex;
   flex-direction: column;
@@ -215,10 +379,10 @@
   border: 2px solid #00ff9d;
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 255, 157, 0.2);
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .fastag-pass-top {
@@ -226,14 +390,14 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
 
 .fastag-logo-mini {
   background: #ff8800;
   color: #ffffff;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 11px;
   padding: 3px 8px;
   border-radius: 4px;
   letter-spacing: 0.05em;
@@ -241,7 +405,7 @@
 
 .fastag-pass-id {
   font-family: var(--font-mono, monospace);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #00f0ff;
   background: rgba(0, 240, 255, 0.12);
@@ -251,13 +415,13 @@
 
 .fastag-pass-body {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
 }
 
 .fastag-pass-qr-box {
-  width: 104px;
-  height: 104px;
+  width: 100px;
+  height: 100px;
   background: #ffffff;
   border-radius: 10px;
   padding: 6px;
@@ -268,41 +432,18 @@
   flex-shrink: 0;
 }
 
-.qr-matrix {
-  position: relative;
-  width: 74px;
-  height: 74px;
-  background: #000000;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qr-corner {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 3px solid #00ff9d;
-  background: #000000;
-}
-.qr-corner.top-left { top: 4px; left: 4px; }
-.qr-corner.top-right { top: 4px; right: 4px; }
-.qr-corner.bottom-left { bottom: 4px; left: 4px; }
-.qr-center-icon { font-size: 16px; z-index: 5; }
-
 .qr-scan-label {
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 900;
   color: #000000;
-  margin-top: 4px;
+  margin-top: 3px;
   letter-spacing: 0.04em;
 }
 
 .fastag-pass-details {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   flex: 1;
   min-width: 0;
 }
@@ -313,14 +454,14 @@
 }
 
 .pass-label {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   color: #64748b;
   letter-spacing: 0.04em;
 }
 
 .pass-value {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #ffffff;
 }
@@ -328,12 +469,12 @@
 .pass-value.highlight {
   color: #00f0ff;
   font-family: var(--font-mono, monospace);
-  font-size: 13px;
+  font-size: 12.5px;
 }
 
 .pass-value.highlight-free {
   color: #00ff9d;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 800;
 }
 
@@ -344,4 +485,83 @@
   justify-content: space-between;
   font-size: 9.5px;
   color: #64748b;
+}
+
+
+/* ── Prominent Inline Alert Banners ── */
+.fastag-inline-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  animation: fastagAlertFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 12px;
+}
+
+@keyframes fastagAlertFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fastag-inline-alert.error {
+  background: rgba(255, 61, 110, 0.12);
+  border: 1px solid rgba(255, 61, 110, 0.45);
+  border-left: 4px solid #ff3d6e;
+  color: #ffb3c6;
+}
+
+.fastag-inline-alert.warning {
+  background: rgba(255, 184, 0, 0.12);
+  border: 1px solid rgba(255, 184, 0, 0.45);
+  border-left: 4px solid #ffb800;
+  color: #fed7aa;
+}
+
+.fastag-inline-alert.info {
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  border-left: 4px solid #00f0ff;
+  color: #bae6fd;
+}
+
+.fastag-inline-alert.success {
+  background: rgba(0, 255, 157, 0.12);
+  border: 1px solid rgba(0, 255, 157, 0.45);
+  border-left: 4px solid #00ff9d;
+  color: #a7f3d0;
+}
+
+.fastag-alert-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fastag-alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fastag-alert-title {
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+
+.fastag-alert-text {
+  font-size: 11.5px;
+  opacity: 0.92;
+}
+
+.fastag-btn-submit.disabled-btn {
+  background: rgba(100, 116, 139, 0.25) !important;
+  color: #64748b !important;
+  border: 1px solid rgba(100, 116, 139, 0.3) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
 }

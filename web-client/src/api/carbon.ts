@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? "https://greenbyte-backend-nine.vercel.app" : "http://localhost:5000");
+const API_BASE_URL = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 
 // Create axios instance with base URL
 const apiClient = axios.create({
@@ -70,7 +70,19 @@ export const carbonAPI = {
   /**
    * Get user statistics
    */
-    /**
+  /**
+   * Get user statistics
+   */
+  getUserStats: async () => {
+    try {
+      const response = await apiClient.get('/carbon/stats');
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error;
+    }
+  },
+
+  /**
    * Get supported highway toll plazas
    */
   getTollPlazas: async () => {
@@ -92,15 +104,6 @@ export const carbonAPI = {
         vehicleNumber,
         creditsToRedeem
       });
-      return response.data;
-    } catch (error: any) {
-      throw error.response?.data || error;
-    }
-  },
-
-  getUserStats: async () => {
-    try {
-      const response = await apiClient.get('/carbon/stats');
       return response.data;
     } catch (error: any) {
       throw error.response?.data || error;

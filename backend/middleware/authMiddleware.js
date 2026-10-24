@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'greenbyte_super_secret_jwt_key_2026';
-
 /**
  * Middleware to verify JWT token
  * Extracted token from Authorization header: "Bearer <token>"
@@ -17,7 +15,7 @@ const verifyToken = (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // { userId, email, iat, exp }
     next();
   } catch (error) {
@@ -40,7 +38,7 @@ const verifyToken = (req, res, next) => {
 const generateToken = (userId, email) => {
   return jwt.sign(
     { userId, email },
-    JWT_SECRET,
+    process.env.JWT_SECRET,
     { expiresIn: '7d' } // Token expires in 7 days
   );
 };

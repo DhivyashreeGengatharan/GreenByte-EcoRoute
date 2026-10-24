@@ -14,20 +14,6 @@ const carbonRoutes = require('./routes/carbon');
 const { connectDB } = require('./models/User');
 
 const app = express();
-
-// Normalize URL in case Vercel rewrites prepended /server.js
-app.use((req, res, next) => {
-  if (req.url.startsWith('/server.js')) {
-    const rawPath = req.headers['x-matched-path'] || req.headers['x-now-route-matches'];
-    if (rawPath && !rawPath.startsWith('/server.js')) {
-      req.url = rawPath;
-    } else {
-      req.url = req.url.replace(/^\/server\.js/, '') || '/';
-    }
-  }
-  next();
-});
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors({
@@ -511,7 +497,15 @@ async function fetchOSRM(origin, destination, opts = {}) {
           console.log(`[OSRM] ✓ ${res.data.routes.length} route(s) from ${server}`);
           return res.data;
         }
+        if (res.data?.code === 'NoRoute' || res.data?.code === 'NoSegment') {
+          console.log(`[OSRM] ✗ ${server} returned ${res.data.code}: disconnected by water or no road`);
+          return { code: 'NoRoute', routes: [] };
+        }
       } catch (e) {
+        if (e.response?.data?.code === 'NoRoute' || e.response?.data?.code === 'NoSegment') {
+          console.log(`[OSRM] ✗ Disconnected: ${e.response.data.code}`);
+          return { code: 'NoRoute', routes: [] };
+        }
         console.log(`[OSRM] Attempt ${attempt + 1} on ${server} failed: ${e.message}`);
         if (attempt < retries) await new Promise(r => setTimeout(r, 2000));
       }
@@ -783,15 +777,50 @@ app.post('/api/route', async (req, res) => {
 
     const osrmData = await fetchOSRM(orig, dest, { alternatives: true, retries: 2 });
 
+    // Check if OSRM found zero road routes
     if (!osrmData?.routes?.length) {
-      console.log('[ROUTE] ✗ OSRM failed');
+      console.log('[ROUTE] ✗ No road route found (separated by sea or inaccessible terrain)');
       return res.status(200).json({
-        routes: [], shortestRouteId: null, ecoRouteId: null,
+        success: false,
+        noRoadRoute: true,
+        routes: [],
+        shortestRouteId: null,
+        ecoRouteId: null,
         comparison: { differencePercent: 0, classification: 'similar' },
-        interventionZones: [], fallback: true,
-        error: 'Could not find road routes. Try clicking closer to a road.',
+        interventionZones: [],
+        fallback: true,
+        error: 'No road route available (separated by sea or water body with no connected road network).',
         routeLabels: {},
       });
+    }
+
+    // Check for sea crossing or excessive road snap distance (>8km away in water)
+    const bestRoute = osrmData.routes[0];
+    const coords = bestRoute.geometry?.coordinates || [];
+    if (coords.length > 0) {
+      const firstCoord = { lon: coords[0][0], lat: coords[0][1] };
+      const lastCoord = { lon: coords[coords.length - 1][0], lat: coords[coords.length - 1][1] };
+      
+      const origSnapDist = haversine(orig.lat, orig.lon, firstCoord.lat, firstCoord.lon);
+      const destSnapDist = haversine(dest.lat, dest.lon, lastCoord.lat, lastCoord.lon);
+      const origWpDist = (osrmData.waypoints?.[0]?.distance || 0) / 1000;
+      const destWpDist = (osrmData.waypoints?.[1]?.distance || 0) / 1000;
+
+      if (origSnapDist > 8 || destSnapDist > 8 || origWpDist > 6 || destWpDist > 6) {
+        console.log(`[ROUTE] ✗ Sea crossing detected: origSnap=${origSnapDist.toFixed(1)}km, destSnap=${destSnapDist.toFixed(1)}km, wp0=${origWpDist.toFixed(1)}km, wp1=${destWpDist.toFixed(1)}km`);
+        return res.status(200).json({
+          success: false,
+          noRoadRoute: true,
+          routes: [],
+          shortestRouteId: null,
+          ecoRouteId: null,
+          comparison: { differencePercent: 0, classification: 'similar' },
+          interventionZones: [],
+          fallback: true,
+          error: 'No road route available (separated by sea or water body with no connected road network).',
+          routeLabels: {},
+        });
+      }
     }
 
     /* ══════════════════════════════════════════════
@@ -856,10 +885,10 @@ app.post('/api/route', async (req, res) => {
       }
 
       const getEnvironmentalValue = (pollution, dist) => {
-        if (!dist || dist <= 0) return 0;
+        if (!dist || dist <= 0) return 50;
         const exposure = pollution / dist;
-        const cleanliness = Math.max(0.1, 1 - (exposure * 1.5));
-        return Math.round(dist * cleanliness * 5);
+        const cleanliness = Math.max(0.1, Math.min(1.0, 1 - (exposure * 1.5)));
+        return Math.round(cleanliness * 100);
       };
 
       // RETURN ALL ROUTES FOUND FOR VERY LONG ROUTES
@@ -892,20 +921,29 @@ app.post('/api/route', async (req, res) => {
         else if (r.id === shortestRouteId) r.type = 'shortest';
       });
 
-      const totalCredits = ecoRoute.summary.carbon + 10; // extra bonus for choosing the top path
+      const rawShortScore = shortestRouteObj.summary.totalPollutionScore || 0;
+      const rawEcoScore = ecoRoute.summary.totalPollutionScore || 0;
+      const shortExp = shortestRouteObj.summary.totalDistance > 0 ? rawShortScore / shortestRouteObj.summary.totalDistance : 0;
+      const ecoExp = ecoRoute.summary.totalDistance > 0 ? rawEcoScore / ecoRoute.summary.totalDistance : 0;
+      const exposureDelta = Math.max(0, shortExp - ecoExp);
+      const avoidedCongestionPollution = exposureDelta * (shortestRouteObj.summary.totalDistance || 1);
+      const pollutionDelta = Math.max(rawShortScore - rawEcoScore, avoidedCongestionPollution, 0);
+      const carbonSavedKg = Number((pollutionDelta * 0.45).toFixed(3));
+      // Credits strictly calculated from the difference between shortest route and eco-friendly route
+      const totalCredits = pollutionDelta > 0 ? Math.max(5, Math.round(pollutionDelta * 12)) : 5;
 
-      console.log(`[RESPONSE-VERYLONG] Returning ${sortedByValue.length} routes to frontend. Eco: ${ecoRoute.id}(Score ${ecoRoute.summary.carbon})`);
+      console.log(`[RESPONSE-VERYLONG] Eco: ${ecoRoute.id}, Delta: ${pollutionDelta.toFixed(2)}, Credits: ${totalCredits}`);
 
       return res.status(200).json({
         success: true,
         routes: sortedByValue,
         shortestRouteId: shortestRouteId,
         ecoRouteId: ecoRoute.id,
-        comparison: { differencePercent: 0, classification: 'cleaner' },
+        comparison: { differencePercent: efficiencyDiff || 0, classification: 'cleaner' },
         interventionZones: [],
         hotspotLocation: null,
         rewards: {
-          carbonSavedKg: 0,
+          carbonSavedKg,
           creditsEarned: totalCredits,
           ecoBonusCredits: 10,
         },
@@ -1135,12 +1173,12 @@ app.post('/api/route', async (req, res) => {
       });
     });
 
-    // Helper for normalized score (Environmental Value: distance * quality)
+    // Helper for normalized score (Cleanliness Eco Score: 0 to 100)
     const getEnvironmentalValue = (pollution, dist) => {
-      if (!dist || dist <= 0) return 0;
+      if (!dist || dist <= 0) return 50;
       const exposure = pollution / dist;
-      const cleanliness = Math.max(0.1, 1 - (exposure * 1.5));
-      return Math.round(dist * cleanliness * 5);
+      const cleanliness = Math.max(0.1, Math.min(1.0, 1 - (exposure * 1.5)));
+      return Math.round(cleanliness * 100);
     };
 
     // RETURN ALL ROUTES FOUND
@@ -1177,10 +1215,21 @@ app.post('/api/route', async (req, res) => {
       ? { lat: interventionZones[0].lat, lng: interventionZones[0].lon }
       : null;
 
-    const carbonSavedKg = Math.max(shortScore - ecoScore, 0);
-    const totalCredits = ecoRoute.summary.carbon + 10;
+    // Compute avoided pollution based strictly on difference between shortest route and eco route
+    const shortestMatch = alternativeRoutes.find(r => r.id === shortestRouteId) || shortestRouteObj;
+    const ecoMatch = alternativeRoutes.find(r => r.id === ecoRoute.id) || ecoRoute;
+    const rawShortScore = shortestMatch.summary.totalPollutionScore || 0;
+    const rawEcoScore = ecoMatch.summary.totalPollutionScore || 0;
+    const shortExp = shortestMatch.summary.totalDistance > 0 ? rawShortScore / shortestMatch.summary.totalDistance : 0;
+    const ecoExp = ecoMatch.summary.totalDistance > 0 ? rawEcoScore / ecoMatch.summary.totalDistance : 0;
+    const exposureDelta = Math.max(0, shortExp - ecoExp);
+    const avoidedCongestionPollution = exposureDelta * (shortestMatch.summary.totalDistance || 1);
+    const pollutionDelta = Math.max(rawShortScore - rawEcoScore, avoidedCongestionPollution, 0);
+    const carbonSavedKg = Number((pollutionDelta * 0.45).toFixed(3));
+    // Credits strictly calculated from the difference between shortest route and eco-friendly route
+    const totalCredits = pollutionDelta > 0 ? Math.max(5, Math.round(pollutionDelta * 12)) : 5;
 
-    console.log(`[REWARDS] Eco: ${ecoRoute.id}, Score: ${ecoRoute.summary.carbon}, Credits: ${totalCredits}`);
+    console.log(`[REWARDS] Eco: ${ecoRoute.id}, Diff: ${pollutionDelta.toFixed(2)}, AvoidedCO2: ${carbonSavedKg}kg, CreditsEarned: ${totalCredits}`);
     console.log(`[RESPONSE] Returning ${sortedByValue.length} routes to frontend`);
 
     const resultPayload = {

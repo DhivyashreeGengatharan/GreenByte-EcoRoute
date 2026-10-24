@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState } from "react";
 import { LeafletMap } from "./LeafletMap";
 import { Sidebar } from "./Sidebar";
@@ -24,6 +25,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [routeError, setRouteError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
@@ -44,15 +46,20 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
       return;
     }
     setLoading(true);
+    setRouteError(null);
     try {
       const data = await calculateRoute(
         { lat: origin.lat, lon: origin.lon },
         { lat: destination.lat, lon: destination.lon }
       );
       setRouteData(data);
+      setRouteError(null);
     } catch (err: any) {
       console.error(err);
-      alert(err.message || "Failed to find route. Try nearby locations.");
+      const errMsg = err.message || "No road route available";
+      setRouteError(errMsg);
+      setRouteData(null);
+      toast.error(errMsg, { duration: 6000, icon: '🌊' });
     } finally {
       setLoading(false);
     }
@@ -126,6 +133,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
           destination={destination}
           loading={loading}
           mobileOpen={mobileSidebarOpen}
+          routeError={routeError}
         />
 
         <main className="cockpit-map-viewport" style={{ flex: 1, position: "relative", height: "100%" }}>
@@ -288,6 +296,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onOpenAuth }) => {
           loading={loading}
           onOpenAuth={onOpenAuth}
           mobileOpen={mobilePanelOpen}
+          routeError={routeError}
           onCarbonStored={() => {
             console.log('Carbon credits stored successfully');
           }}

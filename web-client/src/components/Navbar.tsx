@@ -97,16 +97,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
 
       {/* Action / User Profile Section */}
       <div className="nav-action-section">
-        {/* FASTag Toll Waiver Quick Trigger */}
+                {/* FASTag Toll Waiver Quick Trigger */}
         <button
           type="button"
           onClick={() => setShowFastagModal(true)}
           className="nav-fastag-btn"
           title="Redeem Carbon Credits for FASTag Toll Fee Waiver"
         >
-          <span className="fastag-icon">⚡</span>
-          <span className="fastag-text">FASTag Waiver</span>
+          <span style={{ fontSize: "14px" }}>⚡</span>
+          <span>FASTag Waiver</span>
         </button>
+
         {/* Carbon Ledger Quick Access */}
         <button
           type="button"
@@ -195,18 +196,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
       </div>
 
       {/* Credits / History Modal */}
+            <FastagModal
+        isOpen={showFastagModal}
+        onClose={() => setShowFastagModal(false)}
+        onOpenAuth={onOpenAuth}
+      />
       <HistoryModal 
         isOpen={showHistoryModal} 
         onClose={() => setShowHistoryModal(false)} 
         onOpenAuth={onOpenAuth}
       />
-          {/* FASTag Redemption Modal */}
-      {showFastagModal && (
-        <FastagModal
-          isOpen={showFastagModal}
-          onClose={() => setShowFastagModal(false)}
-        />
-      )}
     </header>
   );
 };

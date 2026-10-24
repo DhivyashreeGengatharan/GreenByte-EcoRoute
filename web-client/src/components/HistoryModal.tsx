@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../auth/AuthContext';
 import { carbonAPI } from '../api/carbon';
 import { CoinsIcon, CloseIcon, RouteIcon, LeafIcon, ShieldCheckIcon } from './ui/Icons';
@@ -75,11 +76,11 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onO
 
   if (!isOpen) return null;
 
-  const totalCredits = history.reduce((sum, trip) => sum + (trip.carbonSaved || 0), 0);
-  const totalDistance = history.reduce((sum, trip) => sum + (trip.distance || 0), 0);
+  const totalCredits = history.reduce((sum, trip) => sum + (Number(trip.carbonSaved) || 0), 0);
+  const totalDistance = history.reduce((sum, trip) => sum + (Number(trip.distance) || 0), 0);
   const totalTrips = history.length;
 
-  return (
+  return createPortal(
     <div className="history-modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="history-modal-content" onClick={e => e.stopPropagation()}>
         {/* Header */}
@@ -206,19 +207,19 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onO
                   {history.map((trip) => (
                     <tr key={trip.id}>
                       <td style={{ fontWeight: '600' }}>
-                        {new Date(trip.storedAt).toLocaleDateString(undefined, {
+                        {trip.storedAt ? new Date(trip.storedAt).toLocaleDateString(undefined, {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric'
-                        })}
+                        }) : 'Recent Route'}
                       </td>
                       <td style={{ fontFamily: 'var(--font-mono, monospace)' }}>
-                        {trip.distance.toFixed(1)} km
+                        {Number(trip.distance || 0).toFixed(1)} km
                       </td>
                       <td>
                         <span className="history-credit-pill">
                           <CoinsIcon size={12} color="#10b981" />
-                          <span>+{trip.carbonSaved.toFixed(0)} Credits</span>
+                          <span>+{Number(trip.carbonSaved || 0).toFixed(0)} Credits</span>
                         </span>
                       </td>
                     </tr>
@@ -229,7 +230,8 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onO
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

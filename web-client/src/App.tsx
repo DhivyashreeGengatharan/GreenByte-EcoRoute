@@ -6,14 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import LandingPage from './components/LandingPage';
 import DashboardPage from './components/DashboardPage';
 import Marketplace from './components/Marketplace';
-
-const DashboardGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isExplored = sessionStorage.getItem('ecoroute_explored') === 'true';
-  if (!isExplored) {
-    return <Navigate to="/" replace />;
-  }
-  return <>{children}</>;
-};
+import FloatingParticles from './components/ui/FloatingParticles';
 
 const App: React.FC = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -35,7 +28,25 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster 
+        position="top-center" 
+        reverseOrder={false}
+        containerStyle={{
+          zIndex: 99999999,
+        }}
+        toastOptions={{
+          style: {
+            zIndex: 99999999,
+            background: '#0b1120',
+            color: '#f8fafc',
+            border: '1px solid rgba(0, 240, 255, 0.4)',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.85)',
+            fontSize: '13px',
+            fontWeight: '600'
+          }
+        }}
+      />
+      <FloatingParticles count={35} color="rgba(0, 240, 255, 0.3)" />
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={closeAuthModal}
@@ -43,14 +54,7 @@ const App: React.FC = () => {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route 
-          path="/dashboard" 
-          element={
-            <DashboardGuard>
-              <DashboardPage onOpenAuth={openAuthModal} />
-            </DashboardGuard>
-          } 
-        />
+        <Route path="/dashboard" element={<DashboardPage onOpenAuth={openAuthModal} />} />
         <Route path="/marketplace" element={<Marketplace />} />
         {/* Redirect any unknown routes to landing page */}
         <Route path="*" element={<Navigate to="/" replace />} />
