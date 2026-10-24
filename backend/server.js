@@ -40,12 +40,8 @@ app.use(cors({
 connectDB().catch(err => console.warn('⚠️ MongoDB offline (routing still works):', err.message));
 
 app.use('/auth', authRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/carbon', carbonRoutes);
-app.use('/api/carbon', carbonRoutes);
 app.get('/test', (req, res) => res.json({ status: 'ok', message: 'Backend reachable' }));
-app.get('/api/test', (req, res) => res.json({ status: 'ok', message: 'Backend reachable' }));
-app.get('/', (req, res) => res.json({ status: 'ok', message: 'GreenByte Backend API is active' }));
 
 /* ─────────────────── CONFIG ─────────────────── */
 
@@ -54,8 +50,9 @@ const routeCache = new Map();
 const ROUTE_CACHE_TTL_MS = 1000 * 60 * 60 * 2; // 2 hour cache
 
 function getCorridorCacheKey(orig, dest) {
-  return ${orig.lat.toFixed(3)},->,;
+  return `${orig.lat.toFixed(3)},${orig.lon.toFixed(3)}->${dest.lat.toFixed(3)},${dest.lon.toFixed(3)}`;
 }
+
 
 const { MAPBOX_ACCESS_TOKEN, JWT_SECRET, MONGODB_URI } = process.env;
 
@@ -754,7 +751,7 @@ app.post('/api/route', async (req, res) => {
     if (routeCache.has(cacheKey)) {
       const cachedEntry = routeCache.get(cacheKey);
       if (Date.now() - cachedEntry.timestamp < ROUTE_CACHE_TTL_MS) {
-        console.log(⚡ [CORRIDOR CACHE HIT] Returned in ms for );
+        console.log(`⚡ [CORRIDOR CACHE HIT] Returned in ${Date.now() - startTime}ms for ${cacheKey}`);
         return res.status(200).json({
           ...cachedEntry.data,
           cached: true,
@@ -915,7 +912,7 @@ app.post('/api/route', async (req, res) => {
         optimizationTriggered: false,
         processingTimeMs: Date.now() - startTime,
         routeLabels: Object.fromEntries(
-          sortedByValue.map(r => [r.id, r.type])
+          sortedRoutes.map(r => [r.id, r.type])
         ),
         routeSources: Object.fromEntries(
           scoredRoutes.map(r => [r.id, r.source || 'osrm'])
@@ -1186,7 +1183,31 @@ app.post('/api/route', async (req, res) => {
     console.log(`[REWARDS] Eco: ${ecoRoute.id}, Score: ${ecoRoute.summary.carbon}, Credits: ${totalCredits}`);
     console.log(`[RESPONSE] Returning ${sortedByValue.length} routes to frontend`);
 
+    const resultPayload = {
+      success: true,
+      routes: sortedByValue,
+      shortestRouteId: shortestRouteId,
+      ecoRouteId: ecoRoute.id,
+      comparison: { differencePercent: efficiencyDiff, classification },
+      interventionZones,
+      hotspotLocation,
+      rewards: {
+        carbonSavedKg: Number(carbonSavedKg.toFixed(4)),
+        creditsEarned: totalCredits,
+        ecoBonusCredits: 10,
+      },
+      optimizationTriggered: efficiencyDiff < 0,
+      routeLabels: Object.fromEntries(
+        sortedByValue.map(r => [r.id, r.type])
+      ),
+      routeSources: Object.fromEntries(
+        alternativeRoutes.map(r => [r.id, r.source || 'generated'])
+      ),
+    };
+    routeCache.set(cacheKey, { timestamp: Date.now(), data: resultPayload });
+
     res.status(200).json({
+      ...resultPayload,
       success: true,
       routes: sortedByValue,
       shortestRouteId: shortestRouteId,
@@ -1264,14 +1285,15 @@ app.post('/api/simulate', async (req, res) => {
 /* ─────────────────── SERVER ─────────────────── */
 
 const PORT = process.env.PORT || 5000;
-let server;
 
-if (require.main === module || !process.env.VERCEL) {
-  server = app.listen(PORT, '0.0.0.0', () => {
+// Only start the HTTP listener in local development (Vercel invokes the exported app as a serverless handler)
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🌍 Pollution-Aware Route Planner — Backend`);
     console.log(`🚀 Listening on http://localhost:${PORT}`);
     console.log(`📡 Adaptive sampling: 6–40 points | OSRM timeout: ${OSRM_TIMEOUT / 1000}s\n`);
   });
+
   server.timeout = 120000;
 }
 
