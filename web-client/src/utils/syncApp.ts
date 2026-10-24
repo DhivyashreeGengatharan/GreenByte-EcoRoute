@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { isAppPlatform } from './platform';
 
 /**
  * syncLiveApp
@@ -35,7 +36,9 @@ export const syncLiveApp = async () => {
 
   setTimeout(() => {
     toast.success('App updated to latest cloud version!', { id: toastId });
-    const cleanUrl = window.location.origin + window.location.pathname;
-    window.location.href = `${cleanUrl}?sync_v=${Date.now()}`;
+    const isApp = isAppPlatform();
+    const basePath = isApp ? '/dashboard' : window.location.pathname;
+    const appQuery = isApp ? '&platform=app' : '';
+    window.location.href = `${window.location.origin}${basePath}?sync_v=${Date.now()}${appQuery}`;
   }, 450);
 };

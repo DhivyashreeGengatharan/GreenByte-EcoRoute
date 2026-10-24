@@ -13,6 +13,7 @@ import {
 } from "./ui/Icons";
 import Button from "./ui/Button";
 import { syncLiveApp } from "../utils/syncApp";
+import { isAppPlatform } from "../utils/platform";
 import "./Navbar.css";
 
 interface NavbarProps {
@@ -28,6 +29,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
   const [isSyncing, setIsSyncing] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+  const isApp = isAppPlatform();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -55,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenSimulator }) =
     <header className="ecoroute-navbar">
       {/* Brand & Status Section */}
       <div className="nav-brand-section">
-        <Link to="/" className="nav-brand-link" title="EcoRoute Spatial Platform">
+        <Link to={isApp ? "/dashboard" : "/"} className="nav-brand-link" title="EcoRoute Spatial Platform">
           <div className="nav-brand-icon-box">
             <LeafIcon size={20} color="#ffffff" />
           </div>

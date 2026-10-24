@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  background: rgba(11, 17, 32, 0.88);
+  background: rgba(11, 17, 32, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(0, 240, 255, 0.14);
@@ -16,10 +16,11 @@
   flex-shrink: 0;
   position: relative;
   transition: background-color 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 [data-theme='dark'] .ecoroute-navbar {
-  background: rgba(11, 17, 32, 0.88);
+  background: rgba(11, 17, 32, 0.95);
   border-bottom: 1px solid rgba(0, 240, 255, 0.14);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
@@ -362,20 +363,24 @@
 }
 
 @media (max-width: 640px) {
-  .ecoroute-navbar {
-    padding: 0 12px;
-    height: 56px;
-  }
   .nav-center-links {
     display: none;
   }
 }
 
-/* High-Density Mobile Navigation Overrides - Zero Wrap / Zero Collision */
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE SAFE AREA INSET & SYSTEM STATUS BAR TOP COLLISION ELIMINATION
+   Avoids overlapping with Android / iOS clock, battery, and 5G icons
+   ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .ecoroute-navbar {
-    padding: 0 10px !important;
-    height: 54px !important;
+    padding-top: max(env(safe-area-inset-top, 0px), 36px) !important;
+    padding-bottom: 8px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    height: auto !important;
+    min-height: calc(52px + max(env(safe-area-inset-top, 0px), 36px)) !important;
+    box-sizing: border-box !important;
   }
   .nav-brand-section {
     gap: 8px !important;
@@ -407,6 +412,12 @@
     height: 28px !important;
     font-size: 11px !important;
   }
+}
+
+/* Dedicated Native App Platform Overrides */
+body.is-app-platform .ecoroute-navbar {
+  padding-top: max(env(safe-area-inset-top, 0px), 38px) !important;
+  min-height: calc(52px + max(env(safe-area-inset-top, 0px), 38px)) !important;
 }
 
 @media (max-width: 480px) {
